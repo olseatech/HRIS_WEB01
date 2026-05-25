@@ -379,9 +379,9 @@ public class ReportsController {
 		}
 		
 		
-		map.put("I.PI_Telephone_NO", "  " + emp.getTelNo() != null ? emp.getTelNo() : "");
-		map.put("I.PI_Mobile_NO", "  " + emp.getMobileNo1() != null ? emp.getMobileNo1() : "");
-		map.put("I.PI_EmailAdd", "  " + emp.getEmail1() != null ? emp.getEmail1() : "");
+		map.put("I.PI_Telephone_NO", "  " + (emp.getTelNo() != null ? emp.getTelNo() : ""));
+		map.put("I.PI_Mobile_NO", "  " + (emp.getMobileNo1() != null ? emp.getMobileNo1() : ""));
+		map.put("I.PI_EmailAdd", "  " + (emp.getEmail1() != null ? emp.getEmail1() : ""));
 		
 		int ctrForChild = 1;
 		boolean spousePopulated = false;
@@ -1156,11 +1156,19 @@ public class ReportsController {
 //			@PathVariable String notes,
 			HttpServletRequest request, HttpServletResponse response) throws JRException, Exception {
 		Optional<ServiceRecordReportRequest> optionalSrRequest = serviceRecordReportRequestRepository.findById(recordId);
-		ServiceRecordReportRequest srReportRequest = optionalSrRequest.orElseGet(() -> new ServiceRecordReportRequest());
-		
+		if (!optionalSrRequest.isPresent()) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Service record request not found.");
+			return;
+		}
+		ServiceRecordReportRequest srReportRequest = optionalSrRequest.get();
+		if (srReportRequest.getEmployee() == null) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Employee not linked to service record request.");
+			return;
+		}
+
 		Optional<Employee> optional = employeeRepository.findById(srReportRequest.getEmployee().getId());
 		Employee employee = optional.orElseGet(() -> new Employee());
-		
+
 		List<ServiceRecord> list = serviceRecordRepository.findByEmployeeId(srReportRequest.getEmployee().getId());
 		
 		
@@ -1191,27 +1199,24 @@ public class ReportsController {
 		
 //		map.put("Officer", "");	
 //		map.put("OfficerPosition", "");	
-		map.put("signDate", formatDate(srReportRequest.getPrintDate().plusDays(1)));	
+		LocalDate srPrintDate = srReportRequest.getPrintDate();
+		map.put("signDate", srPrintDate != null ? formatDate(srPrintDate.plusDays(1)) : "");
 		
 		JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(reportList);
 		
 		response.setContentType("application/pdf");
 		
-		InputStream reportStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( "jasper/reports/Service-Record-Form.jasper");
-		
-		
+		InputStream reportStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("jasper/reports/Service-Record-Form.jasper");
+
 		if(reportStream == null){
-			System.out.println("reportStream is NULL");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Report template not found.");
+			return;
 		}
-		
-		if(response.getOutputStream() == null){
-			System.out.println("response.getOutputStream() is NULL");
-		}
-		
-		JasperRunManager.runReportToPdfStream(reportStream,	response.getOutputStream(), map, beanColDataSource);
-		
+
+		JasperRunManager.runReportToPdfStream(reportStream, response.getOutputStream(), map, beanColDataSource);
+
 	}
-	
+
 	@GetMapping("/viewServiceRecordReport/{employeeId}")
 	public void viewServiceRecordReport(Model model, @PathVariable long employeeId, HttpServletRequest request, HttpServletResponse response) throws JRException, Exception {
 		List<ServiceRecord> list = serviceRecordRepository.findByEmployeeId(employeeId);
@@ -1239,18 +1244,14 @@ public class ReportsController {
 		
 		response.setContentType("application/pdf");
 		
-		InputStream reportStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( "jasper/reports/Service-Record-Form.jasper");
-		
-		
+		InputStream reportStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("jasper/reports/Service-Record-Form.jasper");
+
 		if(reportStream == null){
-			System.out.println("reportStream is NULL");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Report template not found.");
+			return;
 		}
-		
-		if(response.getOutputStream() == null){
-			System.out.println("response.getOutputStream() is NULL");
-		}
-		
-		JasperRunManager.runReportToPdfStream(reportStream,	response.getOutputStream(), map, beanColDataSource);
+
+		JasperRunManager.runReportToPdfStream(reportStream, response.getOutputStream(), map, beanColDataSource);
 		
 	}
 	
@@ -1265,10 +1266,14 @@ public class ReportsController {
 		}
 		
 		Optional<Clearance> oClearance = clearanceRepository.findById(id);
-		Clearance clearance = oClearance.orElseGet(() -> new Clearance());
-				
+		if (oClearance.isEmpty()) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Clearance not found");
+			return;
+		}
+		Clearance clearance = oClearance.get();
+
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+
 		String mn = clearance.getEmployee().getMiddleName();
 		String middleInitial = (mn != null && !mn.isEmpty()) ? mn.charAt(0) + ". " : "";
 		String empName = clearance.getEmployee().getFirstName() + " " + middleInitial + clearance.getEmployee().getLastName();
@@ -1552,8 +1557,8 @@ public class ReportsController {
         dto.setDateFrom(formatDate(serviceRecord.getDateFrom()));
         dto.setDateTo(formatDate(serviceRecord.getDateTo()));
         dto.setDesignation(serviceRecord.getDesignation());
-        dto.setEmployeeStatus(serviceRecord.getEmployeeStatus().getEmployeeStatusName());
-        dto.setSalary(getFormattedAmount(serviceRecord.getSalary())); // Format salary to two decimal places
+        dto.setEmployeeStatus(serviceRecord.getEmployeeStatus() != null ? serviceRecord.getEmployeeStatus().getEmployeeStatusName() : "");
+        dto.setSalary(serviceRecord.getSalary() != null ? getFormattedAmount(serviceRecord.getSalary()) : "");
         dto.setStation(serviceRecord.getStation());
         dto.setBranch(serviceRecord.getBranch());
         dto.setLvAbs(serviceRecord.getLvAbs());
