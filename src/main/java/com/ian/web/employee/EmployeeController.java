@@ -181,9 +181,15 @@ public class EmployeeController {
 	        return "redirect:/dashboard";
 	    }
 
-	    // Prevent privilege escalation: preserve original userType for non-admins
+	    // Preserve HR-managed fields and prevent privilege escalation for non-admins
 	    if (!isAdmin && isOwnRecord && employeeOldRecord != null) {
 	        employee.setUserType(employeeOldRecord.getUserType());
+	        employee.setEmpNo(employeeOldRecord.getEmpNo());
+	        employee.setAssumptiondate(employeeOldRecord.getAssumptiondate());
+	        employee.setPlantillaNo(employeeOldRecord.getPlantillaNo());
+	        employee.setPositionTitle(employeeOldRecord.getPositionTitle());
+	        employee.setDivision(employeeOldRecord.getDivision());
+	        employee.setEmployeeStatus(employeeOldRecord.getEmployeeStatus());
 	    }
 
 		if (errors.hasErrors()) {

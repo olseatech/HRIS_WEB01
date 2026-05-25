@@ -789,8 +789,11 @@
 				$("#myPersonalInfoNav").addClass("active");
 
 				$('#returnBtn').hide();
-
 				$("#showMode").val("PROFILE");
+
+				// HR-only fields: lock and remove required validation so employees can submit
+				$("#empNo, #assumptiondate, #plantillaNo").prop("readonly", true).removeClass("required-field-hrisp");
+				$("#employeeStatus, #positionTitle, #division").prop("disabled", true).removeClass("required-field-hrisp");
 			} else {
 				$(".nav-item-submenu").removeClass("nav-item-expanded nav-item-open");
 				$("#employeeManagementNav").addClass("nav-item-expanded nav-item-open");
