@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn exec:java -Dexec.mainClass=\"com.ian.web.reports.JasperDecompiler\" -Dexec.classpathScope=\"compile\")",
+      "Bash(mvn exec:java -Dexec.mainClass=\"com.ian.web.reports.JasperDecompiler\" -Dexec.classpathScope=\"compile\" -o)",
+      "PowerShell(gh repo view olseatech/HRIS_WEB01 2>&1)",
+      "Bash(mvn spring-boot:run)",
+      "Bash(echo \"PID: $!\")",
+      "PowerShell(Get-Process -Name \"java\" -ErrorAction SilentlyContinue | ForEach-Object { Write-Output \"Killing PID $\\($_.Id\\)\"; $_.Kill\\(\\) }; Start-Sleep -Seconds 3; Get-Process -Name \"java\" -ErrorAction SilentlyContinue | Measure-Object | Select-Object -ExpandProperty Count)",
+      "PowerShell(taskkill /F /IM java.exe 2>&1; Start-Sleep -Seconds 3; $remaining = \\(Get-Process -Name \"java\" -ErrorAction SilentlyContinue | Measure-Object\\).Count; Write-Output \"Remaining Java processes: $remaining\")"
+    ]
+  }
+}

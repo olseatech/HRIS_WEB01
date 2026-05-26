@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn clean *)",
+      "Bash(timeout 30 mvn spring-boot:run -q)",
+      "Bash(Get-Service MySQL*)",
+      "Bash(Select-Object -Property Name, Status)",
+      "Bash(timeout 45 mvn spring-boot:run -q)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "Bash(Start-Sleep -Seconds 10)",
+      "Bash(curl -s http://localhost:8080/hrisp/login)",
+      "PowerShell(Start-Sleep -Seconds 12; \\(Invoke-WebRequest -Uri \"http://localhost:8080/hrisp/login\" -ErrorAction SilentlyContinue\\).Content | Select-String \"Login\" | Select-Object -First 1)",
+      "Bash(curl -s -m 5 http://localhost:8080/hrisp/login)",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__computer",
+      "mcp__Claude_in_Chrome__read_page",
+      "mcp__Claude_in_Chrome__read_console_messages",
+      "Bash(mysql -h localhost -u root -pmuning0328 hris_01 -e \"SELECT id, username, user_type, first_name, last_name FROM employee LIMIT 10;\")",
+      "Bash(mysql -h localhost -u root -pmuning0328 hris_01 -e \"SELECT * FROM employee WHERE username = 'emp_user'\\\\G\")",
+      "Bash(pkill -f \"spring-boot:run\")",
+      "Bash(mvn spring-boot:run -q)",
+      "Bash(mysql -h localhost -u root -pmuning0328 hris_01 -e \"SELECT username, password FROM employee WHERE username IN \\('emp_user', 'hr_user', 'admin'\\);\")",
+      "Bash(curl -s -c /tmp/cookies.txt -b /tmp/cookies.txt -X POST http://localhost:8080/hrisp/login -d \"username=emp_user&password=emp_pass\" -L)",
+      "mcp__Claude_in_Chrome__javascript_tool",
+      "mcp__Claude_in_Chrome__shortcuts_execute"
+    ]
+  }
+}
