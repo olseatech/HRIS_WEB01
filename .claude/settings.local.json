@@ -14,7 +14,8 @@
       "mcp__Claude_in_Chrome__navigate",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Habib\\\\IdeaProjects\\\\hrisp-web01\\\\src\\\\main\\\\java\\\\com\\\\ian\\\\web\\\\systemsettings\" -Directory)",
       "Bash(Select-Object -ExpandProperty Name)",
-      "Bash(mvn clean *)"
+      "Bash(mvn clean *)",
+      "Bash(ssh *)"
     ]
   }
 }
