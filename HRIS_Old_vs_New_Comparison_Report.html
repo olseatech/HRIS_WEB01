@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRIS Manila Council — Comparison of Old HRIS and New HRIS</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#55606f; --line:#d8dee7; --soft:#f4f6f9;
+    --navy:#1f3a5f; --accent:#0b5cad; --good:#1a7f4b; --warn:#b26a00; --bad:#b4232a;
+    --code:#f2f4f7;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); margin:0; background:#e9edf2; line-height:1.5; font-size:14px;
+  }
+  .page{
+    background:#fff; width:210mm; min-height:297mm; margin:12px auto; padding:22mm 20mm;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+  }
+  h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif; color:var(--navy); line-height:1.25; margin:0 0 .4em;}
+  h1{font-size:30px;} h2{font-size:22px; border-bottom:3px solid var(--navy); padding-bottom:6px; margin-top:0;}
+  h3{font-size:17px; color:var(--accent); margin-top:1.4em;}
+  h4{font-size:14px; color:var(--ink); margin-top:1.1em;}
+  p{margin:.5em 0;} ul,ol{margin:.4em 0 .8em; padding-left:20px;} li{margin:.25em 0;}
+  small,.muted{color:var(--muted);}
+  code,.mono{font-family:"Consolas","SF Mono",Menlo,monospace; font-size:12px; background:var(--code);
+    padding:1px 5px; border-radius:3px; color:#243b53;}
+  pre{background:var(--code); border:1px solid var(--line); border-left:4px solid var(--accent);
+    padding:10px 12px; border-radius:5px; overflow-x:auto; font-family:"Consolas",Menlo,monospace;
+    font-size:11.5px; line-height:1.45; margin:.6em 0;}
+  table{border-collapse:collapse; width:100%; margin:.7em 0; font-size:12.5px;}
+  th,td{border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top;}
+  th{background:var(--navy); color:#fff; font-weight:600; font-family:"Segoe UI",sans-serif;}
+  tbody tr:nth-child(even){background:var(--soft);}
+  .tag{display:inline-block; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px;
+    color:#fff; letter-spacing:.3px; text-transform:uppercase; white-space:nowrap;}
+  .t-high{background:var(--bad);} .t-med{background:var(--warn);} .t-low{background:#6b7280;}
+  .t-fixed{background:var(--good);} .t-open{background:var(--bad);} .t-new{background:var(--accent);}
+  .cite{font-family:"Consolas",Menlo,monospace; font-size:11px; color:var(--muted);
+    background:#eef2f7; border:1px solid #dbe3ec; border-radius:3px; padding:1px 6px;}
+  .callout{border:1px solid var(--line); border-left:5px solid var(--accent); background:var(--soft);
+    padding:10px 14px; border-radius:5px; margin:.8em 0;}
+  .callout.good{border-left-color:var(--good);} .callout.warn{border-left-color:var(--warn);}
+  .callout.bad{border-left-color:var(--bad);}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .card{border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:#fff;}
+  .card.old{border-top:4px solid var(--warn);} .card.new{border-top:4px solid var(--good);}
+  .kv{width:100%;} .kv td{border:none; border-bottom:1px solid var(--line); padding:5px 4px;}
+  .kv td:first-child{color:var(--muted); width:42%;}
+  .cover{display:flex; flex-direction:column; justify-content:center; min-height:253mm; text-align:center;}
+  .cover .rule{width:70px; height:5px; background:var(--accent); margin:22px auto;}
+  .cover .sub{font-size:19px; color:var(--muted); font-family:Georgia,serif;}
+  .toc li{margin:.35em 0;} .toc .num{display:inline-block; width:26px; color:var(--accent); font-weight:700;}
+  .secnum{color:var(--accent); font-family:"Segoe UI",sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase;}
+  .foot{margin-top:26px; padding-top:8px; border-top:1px solid var(--line); font-size:10.5px; color:var(--muted); display:flex; justify-content:space-between;}
+  @media print{
+    body{background:#fff;}
+    .page{width:auto; min-height:auto; margin:0; padding:16mm 15mm; box-shadow:none;}
+    .page + .page{page-break-before:always;}
+    h2,h3{break-after:avoid;} table,pre,.callout{break-inside:avoid;}
+  }
+  @page{size:A4; margin:14mm;}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page">
+  <div class="cover">
+    <div class="secnum">Management Review · Confidential</div>
+    <h1 style="font-size:38px; margin-top:14px;">HRIS Manila Council</h1>
+    <div class="rule"></div>
+    <div class="sub">Comparison of Old HRIS and New HRIS</div>
+    <p class="muted" style="margin-top:26px; font-size:15px;">
+      Leave Management Module · Setup &amp; Security Parameters<br>
+      Tracked Changes, Fixes &amp; Vulnerability Assessment
+    </p>
+    <table class="kv" style="max-width:420px; margin:34px auto 0; font-size:13px;">
+      <tr><td>Document</td><td>Old vs New HRIS — Evidence-Based Comparison</td></tr>
+      <tr><td>Prepared for</td><td>Management / Project Governance</td></tr>
+      <tr><td>System</td><td>HRIS Manila Council (manilacitycouncil.com)</td></tr>
+      <tr><td>Basis</td><td>Project history, change logs, migrations, source, UAT screenshots</td></tr>
+      <tr><td>Report date</td><td>13 July 2026</td></tr>
+      <tr><td>Classification</td><td>Internal — contains security findings</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ TOC ============ -->
+<section class="page">
+  <h2>Table of Contents</h2>
+  <ol class="toc" style="list-style:none; padding-left:0; font-size:15px; font-family:Georgia,serif;">
+    <li><span class="num">1</span> Executive Summary</li>
+    <li><span class="num">2</span> Scope of Review</li>
+    <li><span class="num">3</span> Old HRIS Overview</li>
+    <li><span class="num">4</span> New HRIS Overview</li>
+    <li><span class="num">5</span> Added Module: Leave Management</li>
+    <li><span class="num">6</span> Setup and Security Parameters</li>
+    <li><span class="num">7</span> List of HRIS Changes</li>
+    <li><span class="num">8</span> Fixes Implemented</li>
+    <li><span class="num">9</span> Vulnerability Assessment — Old HRIS</li>
+    <li><span class="num">10</span> Vulnerability Assessment — New HRIS</li>
+    <li><span class="num">11</span> Evidence and Proof of Changes</li>
+    <li><span class="num">12</span> Conclusion and Recommendations</li>
+  </ol>
+  <div class="callout">
+    <strong>How to read the citations.</strong> Every material claim is tagged with a source in
+    <span class="cite">monospace</span> — a commit hash (e.g. <span class="cite">commit&nbsp;d0d8be0</span>),
+    a change-log document, a database migration, a source file, or a UAT screenshot. Section&nbsp;11 is a
+    master evidence table with independent-verification commands.
+  </div>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Contents</span></div>
+</section>
+
+<!-- ============ 1. EXECUTIVE SUMMARY ============ -->
+<section class="page">
+  <div class="secnum">Section 1</div>
+  <h2>Executive Summary</h2>
+  <p>
+    The HRIS Manila Council system was extended and hardened across a series of tracked changes. This report
+    compares the <strong>Old HRIS</strong> (the system before this engagement) with the <strong>New HRIS</strong>
+    (the system after adding the Leave Management module and enforcing server-side authorization). The comparison
+    is drawn entirely from the project's own history: commit records, change-log documents, database migrations,
+    application source, and User Acceptance Testing (UAT) screenshots.
+  </p>
+
+  <h3>Headline outcomes</h3>
+  <table>
+    <thead><tr><th style="width:34%">Area</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>New capability</td><td>A full <strong>Leave Management module</strong> (CS Form No. 6 applications, Employee's Leave Card ledger, leave-type &amp; holiday settings, PDF exports) — 32 files, ~3,120 lines added <span class="cite">commit d0d8be0</span>.</td></tr>
+      <tr><td>Security hardening</td><td>Server-side <strong>authorization enforced</strong> on leave endpoints, closing a privilege-escalation and IDOR exposure that would have let any employee tamper with leave credits and records <span class="cite">commit b10c18b</span>.</td></tr>
+      <tr><td>Earlier remediation</td><td>PDS "self-edit" access control added across the employee data-sheet controllers, replacing UI-only restrictions with real backend ownership checks <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span>.</td></tr>
+      <tr><td>Data-sheet quality</td><td>Five PDS enhancements (passport photo with validation, L&amp;D hours override, part-time flag, government-ID date validation, GSIS ID) — additive and backward-compatible <span class="cite">CHANGES_SUMMARY.md</span>.</td></tr>
+      <tr><td>Build state</td><td>Compiles cleanly; deployable WAR (~92&nbsp;MB), Java 11, Spring Boot 2.2.4 <span class="cite">RUNTIME_ASSESSMENT_REPORT.md</span>.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout good">
+    <strong>Bottom line.</strong> The New HRIS delivers a materially larger feature set <em>and</em> a stronger
+    security posture than the Old HRIS. The most important improvement is the shift from
+    <em>"authenticated users are trusted"</em> to <em>"actions are authorized by role and record ownership."</em>
+    Residual risks remain and are listed as prioritized follow-ups in Sections&nbsp;10 and&nbsp;12 — none are blockers for the leave deployment.
+  </div>
+
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 1 · Executive Summary</span></div>
+</section>
+
+<!-- ============ 2. SCOPE OF REVIEW ============ -->
+<section class="page">
+  <div class="secnum">Section 2</div>
+  <h2>Scope of Review</h2>
+  <p>This is a documentation and back-search exercise. No code was changed while producing this report. The following definitions are used throughout:</p>
+  <table>
+    <thead><tr><th style="width:22%">Term</th><th>Meaning in this report</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Old HRIS</strong></td><td>The system as it stood before this engagement's changes — Personal Data Sheet (PDS), appointments, clearance, service record, and 201-file modules, with UI-level access restrictions.</td></tr>
+      <tr><td><strong>New HRIS</strong></td><td>The system after adding the Leave Management module, the PDS enhancements, and the server-side authorization hardening.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Sources back-searched</h3>
+  <table>
+    <thead><tr><th style="width:30%">Source type</th><th>Specific artifacts</th></tr></thead>
+    <tbody>
+      <tr><td>Version-control history</td><td>Commit log across all branches — from <span class="cite">first commit</span> through the leave module <span class="cite">d0d8be0</span> and the authorization fix <span class="cite">b10c18b</span>.</td></tr>
+      <tr><td>Change-log documents</td><td><span class="cite">CHANGES_SUMMARY.md</span>, <span class="cite">RUNTIME_ASSESSMENT_REPORT.md</span>, <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span>, <span class="cite">PDS_SELF_EDIT_BUG_FIX.md</span>, <span class="cite">LEAVE_MODULE_BLUEPRINT.md</span>.</td></tr>
+      <tr><td>Database migrations</td><td><span class="cite">2026-leave-management.sql</span>, <span class="cite">2025-ld-hours-display.sql</span>, <span class="cite">2025-we-part-time.sql</span>.</td></tr>
+      <tr><td>Application source</td><td>Leave package, system-settings (holiday / leave-type) packages, <span class="cite">SecurityConfig.java</span>, PDS sub-controllers.</td></tr>
+      <tr><td>Deployment docs</td><td><span class="cite">summaryLinux.md</span>, <span class="cite">DEPLOYMENT_CHECKLIST.md</span>, <span class="cite">SSH_UPLOAD_GUIDE.md</span>.</td></tr>
+      <tr><td>UAT evidence</td><td>Admin and employee screenshot sets (PDS pages, appointments, clearance, change-password, dashboards, system-settings).</td></tr>
+    </tbody>
+  </table>
+
+  <h3>In scope / out of scope</h3>
+  <div class="grid2">
+    <div class="card"><h4 style="margin-top:0;">In scope</h4>
+      <ul><li>Feature comparison Old vs New</li><li>Leave Management module documentation</li><li>Setup &amp; security parameters</li><li>Change and fix inventory</li><li>Vulnerability assessment of both states</li><li>Evidence mapping</li></ul>
+    </div>
+    <div class="card"><h4 style="margin-top:0;">Out of scope</h4>
+      <ul><li>New code changes (documentation task only)</li><li>Penetration testing against the live host</li><li>Payroll / DTR / attendance processing</li><li>Infrastructure hardening beyond app config</li></ul>
+    </div>
+  </div>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 2 · Scope of Review</span></div>
+</section>
+
+<!-- ============ 3. OLD HRIS OVERVIEW ============ -->
+<section class="page">
+  <div class="secnum">Section 3</div>
+  <h2>Old HRIS Overview</h2>
+  <p>The Old HRIS is a Spring Boot web application for the Manila City Council Secretariat / HRM Section, used to maintain employee 201 records for roughly 430 employees. It was already live at <span class="mono">manilacitycouncil.com</span> <span class="cite">summaryLinux.md</span>.</p>
+
+  <h3>Modules present in the Old HRIS</h3>
+  <table>
+    <thead><tr><th style="width:30%">Module</th><th>Function</th></tr></thead>
+    <tbody>
+      <tr><td>Personal Data Sheet (PDS)</td><td>CSC Personal Data Sheet (CS Form 212) capture across personal info, family background, education, eligibility, work experience, voluntary work, learning &amp; development, other info, references, government IDs; PDF export via JasperReports.</td></tr>
+      <tr><td>Appointments</td><td>Employee appointment records with document attachments.</td></tr>
+      <tr><td>Clearance</td><td>Employee clearance processing and printable output.</td></tr>
+      <tr><td>Service Record</td><td>Service-record generation and signatory management.</td></tr>
+      <tr><td>201 Files</td><td>Document management for employee 201 files.</td></tr>
+      <tr><td>System Settings</td><td>Reference data (divisions, districts, positions, eligibility types, salary grades, etc.).</td></tr>
+      <tr><td>Change Password / Auth</td><td>Form login, per-user accounts, role by <span class="mono">userType</span>.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Technology stack</h3>
+  <table class="kv">
+    <tr><td>Language / runtime</td><td>Java 11</td></tr>
+    <tr><td>Framework</td><td>Spring Boot 2.2.4 (Web, Data JPA, Data REST, Security, Thymeleaf)</td></tr>
+    <tr><td>Packaging</td><td>WAR with embedded Tomcat (~92&nbsp;MB)</td></tr>
+    <tr><td>Database</td><td>MySQL — <span class="mono">hris_01</span></td></tr>
+    <tr><td>Reporting</td><td>JasperReports (<span class="mono">.jrxml</span> → <span class="mono">.jasper</span>)</td></tr>
+    <tr><td>Deployment</td><td>nginx reverse proxy → Spring Boot (embedded Tomcat), Let's Encrypt TLS</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>Security characteristic of the Old HRIS (important for later sections).</strong>
+    Access restrictions were largely enforced in the browser (JavaScript disabling fields / hiding buttons),
+    while the backend authorized requests only as <em>"any authenticated user."</em> This pattern is the root of the
+    vulnerabilities assessed in Section&nbsp;9. <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span>
+  </div>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 3 · Old HRIS Overview</span></div>
+</section>
+
+<!-- ============ 4. NEW HRIS OVERVIEW ============ -->
+<section class="page">
+  <div class="secnum">Section 4</div>
+  <h2>New HRIS Overview</h2>
+  <p>The New HRIS retains everything in the Old HRIS and adds a new functional module, a set of PDS enhancements, and a substantive security upgrade.</p>
+
+  <div class="grid2">
+    <div class="card old">
+      <h4 style="margin-top:0;">Old HRIS</h4>
+      <ul>
+        <li>PDS, Appointments, Clearance, Service Record, 201 Files</li>
+        <li>PDS editable by HR/Admin only; employees view/export</li>
+        <li>UI-level access restrictions; backend trusts any authenticated user</li>
+        <li>No leave processing in the system</li>
+      </ul>
+    </div>
+    <div class="card new">
+      <h4 style="margin-top:0;">New HRIS</h4>
+      <ul>
+        <li>All of the above <strong>plus Leave Management</strong></li>
+        <li>PDS employee self-edit with backend ownership checks</li>
+        <li>Server-side role gating on leave admin/mutation endpoints</li>
+        <li>PDS enhancements (photo, L&amp;D hours, part-time, date validation, GSIS ID)</li>
+        <li>Leave-type &amp; holiday configuration in System Settings</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>What is genuinely new</h3>
+  <table>
+    <thead><tr><th style="width:32%">Addition</th><th>Nature</th><th style="width:22%">Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Leave Management module</td><td><span class="tag t-new">Feature</span> CS Form 6, leave card ledger, PDF exports</td><td><span class="cite">commit d0d8be0</span></td></tr>
+      <tr><td>Leave-type &amp; holiday settings</td><td><span class="tag t-new">Feature</span> CRUD + first-boot seeding</td><td><span class="cite">LeaveSettingsSeeder</span></td></tr>
+      <tr><td>Leave authorization</td><td><span class="tag t-fixed">Security</span> role gating + IDOR fix</td><td><span class="cite">commit b10c18b</span></td></tr>
+      <tr><td>PDS self-edit access control</td><td><span class="tag t-fixed">Security</span> ownership checks</td><td><span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></td></tr>
+      <tr><td>PDS enhancements ×5</td><td><span class="tag t-new">Feature</span> additive, backward-compatible</td><td><span class="cite">CHANGES_SUMMARY.md</span></td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 4 · New HRIS Overview</span></div>
+</section>
+
+<!-- ============ 5. LEAVE MANAGEMENT ============ -->
+<section class="page">
+  <div class="secnum">Section 5</div>
+  <h2>Added Module: Leave Management</h2>
+  <p>
+    The Leave Management module digitizes the Council's paper leave process (Civil Service Form No.&nbsp;6) and the
+    Employee's Leave Card ledger. Its design was derived from the Council's own procedure manual, the customized
+    CS Form 6, and a real employee leave card <span class="cite">LEAVE_MODULE_BLUEPRINT.md</span>, then implemented as a
+    new application package <span class="cite">commit d0d8be0</span>.
+  </p>
+
+  <h3>5.1 Workflow supported</h3>
+  <ol>
+    <li><strong>Record</strong> a leave application (CS Form 6) for an employee — office/department, position, salary snapshot, leave type, details, working days, inclusive dates, commutation.</li>
+    <li><strong>Certify</strong> leave credits — the system auto-computes VL/SL "Total Earned / Less this application / Balance" from the ledger.</li>
+    <li><strong>Recommend</strong> and <strong>Approve / Disapprove</strong> — with a special "disapproved due to exigency of the service — no deduction" path.</li>
+    <li><strong>Post</strong> approved leave to the Employee's Leave Card, deducting only from the matching ledger (VL or SL); several leave types deduct nothing.</li>
+    <li><strong>Export</strong> the completed CS Form 6 and the Leave Card as PDF.</li>
+  </ol>
+
+  <h3>5.2 Data model (migration <span class="mono">2026-leave-management.sql</span>)</h3>
+  <table>
+    <thead><tr><th style="width:26%">Table</th><th>Purpose &amp; key columns</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mono">leave_application</span></td><td>One row per CS Form 6. Filing/receipt dates, leave type &amp; details, working days, inclusive dates, certification block (VL/SL earned/less/balance), recommendation, action (days with/without pay), <span class="mono">disapproved_exigency</span> flag, signatory names/titles. FK → <span class="mono">employee</span>.</td></tr>
+      <tr><td><span class="mono">leave_card_entry</span></td><td>Ledger rows. Entry type/date, period, particulars, <span class="mono">vl_earned/vl_deducted</span>, <span class="mono">sl_earned/sl_deducted</span>, remarks, optional FK → <span class="mono">leave_application</span> (links a posted entry back to its application).</td></tr>
+      <tr><td><span class="mono">leave_type</span></td><td>Configurable leave types with legal basis and active flag; seeded on first boot.</td></tr>
+      <tr><td><span class="mono">holiday</span></td><td>Holiday calendar (name, date, type, remarks); managed in System Settings.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>Ledger logic.</strong> Monthly accrual posts 1.25 VL + 1.25 SL; running balances are computed per row. Only "V" entries deduct VL and "S" entries deduct SL — special-privilege, calamity, maternity and similar leaves are recorded without changing balances, matching the sample leave card. <span class="cite">LeaveController.java</span> · <span class="cite">LeaveConstants.java</span></div>
+
+  <h3>5.3 Components delivered</h3>
+  <table>
+    <thead><tr><th style="width:30%">Layer</th><th>Artifacts</th></tr></thead>
+    <tbody>
+      <tr><td>Entities &amp; repositories</td><td><span class="mono">LeaveApplication</span>, <span class="mono">LeaveCardEntry</span>, <span class="mono">LeaveType</span>, <span class="mono">Holiday</span> (+ Spring Data repositories)</td></tr>
+      <tr><td>Controllers</td><td><span class="mono">LeaveController</span>, <span class="mono">HolidayController</span>, <span class="mono">LeaveTypeController</span></td></tr>
+      <tr><td>Seeding</td><td><span class="mono">LeaveSettingsSeeder</span> — seeds leave types on first boot</td></tr>
+      <tr><td>Reports</td><td>Jasper templates <span class="mono">CS-Form-6-Leave.jrxml</span>, <span class="mono">Leave-Card.jrxml</span></td></tr>
+      <tr><td>Views (Thymeleaf)</td><td><span class="mono">employee/leave/employee-list-leave.html</span>, <span class="mono">employee-leave-record.html</span>; settings pages for holiday &amp; leave type</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.4 Access model within the module</h3>
+  <p>
+    Staff (HR/Admin) file, certify, approve and post leave. Employees have a <strong>read-only</strong> self-service
+    view (<span class="mono">/my-leaves</span>): the templates gate every File/Submit/Delete/Add-Entry/Post-Accrual
+    control behind <span class="mono">th:if="${showMode != 'EMPLOYEE'}"</span>. As delivered, that read-only intent is now
+    <em>also enforced on the server</em> (see Sections&nbsp;8 and&nbsp;10).
+  </p>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 5 · Leave Management</span></div>
+</section>
+
+<!-- ============ 6. SETUP & SECURITY PARAMETERS ============ -->
+<section class="page">
+  <div class="secnum">Section 6</div>
+  <h2>Setup and Security Parameters</h2>
+
+  <h3>6.1 Runtime &amp; prerequisites</h3>
+  <table class="kv">
+    <tr><td>JDK</td><td>Java 11</td></tr>
+    <tr><td>Build</td><td>Maven — <span class="mono">mvn clean package</span> → <span class="mono">target/hrisp.war</span></td></tr>
+    <tr><td>Database</td><td>MySQL 5.7/8.x, schema <span class="mono">hris_01</span></td></tr>
+    <tr><td>Runtime</td><td>Embedded-Tomcat fat WAR launched with <span class="mono">java -jar</span></td></tr>
+    <tr><td>Web</td><td>nginx reverse proxy + Let's Encrypt TLS <span class="cite">summaryLinux.md</span></td></tr>
+  </table>
+
+  <h3>6.2 Profiles &amp; environment variables</h3>
+  <table>
+    <thead><tr><th style="width:34%">Setting</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mono">SPRING_PROFILES_ACTIVE</span></td><td>Selects <span class="mono">dev</span> (default) or <span class="mono">prod</span>.</td></tr>
+      <tr><td><span class="mono">DB_USERNAME</span> / <span class="mono">DB_PASSWORD</span></td><td>Production datasource credentials — injected from the environment, not committed.</td></tr>
+      <tr><td><span class="mono">EMPLOYEE_DEFAULT_PASSWORD</span></td><td>Default password assigned to new employee accounts (fallback <span class="mono">ChangeMe123</span>).</td></tr>
+      <tr><td>Local override</td><td><span class="mono">config/application-dev.properties</span> — git-ignored, holds the local DB password.</td></tr>
+      <tr><td>Upload dirs (prod)</td><td><span class="mono">/hrisp/uploads</span>, multipart temp — must exist and be writable.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.3 Security parameters (application layer)</h3>
+  <table>
+    <thead><tr><th style="width:26%">Control</th><th>Configuration</th></tr></thead>
+    <tbody>
+      <tr><td>Authentication</td><td>Spring Security form login; per-user accounts loaded by username <span class="cite">SecurityConfig.java</span></td></tr>
+      <tr><td>Password storage</td><td><span class="mono">MigratingPasswordEncoder</span> — BCrypt-based, migrates legacy hashes on login</td></tr>
+      <tr><td>Roles / authorities</td><td>Authority = <span class="mono">userType</span>: <span class="mono">ROLE_ADMIN</span>, <span class="mono">ROLE_HR</span>, <span class="mono">ROLE_EMPLOYEE</span></td></tr>
+      <tr><td>Self-service capability token</td><td><span class="mono">empHashCode</span> — random per-employee token required on <span class="mono">/my-*</span> self-service URLs</td></tr>
+      <tr><td>Authorization (New HRIS)</td><td>Leave admin &amp; mutation endpoints gated to <span class="mono">hasAnyAuthority("ROLE_ADMIN","ROLE_HR")</span>; PDS saves gated by owner-or-admin checks</td></tr>
+      <tr><td>CSRF</td><td>Enabled globally; ignored only for <span class="mono">/api/**</span>, <span class="mono">/saveServiceRecordRequest</span>, <span class="mono">/process-clearance/**</span>. All leave POSTs are CSRF-protected.</td></tr>
+      <tr><td>File upload validation</td><td>Type allow-list + size cap (e.g. passport photo JPG/PNG, ≤ 5&nbsp;MB) <span class="cite">CHANGES_SUMMARY.md</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.4 Deployment / migration order</h3>
+  <pre># 1) Back up the database first
+mysqldump -u root -p hris_01 &gt; hris_01_backup_$(date +%Y%m%d).sql
+
+# 2) Apply migrations (safe, additive)
+mysql -u root -p hris_01 &lt; 2026-leave-management.sql
+mysql -u root -p hris_01 &lt; 2025-ld-hours-display.sql
+mysql -u root -p hris_01 &lt; 2025-we-part-time.sql
+
+# 3) Build &amp; deploy the WAR to the server's target/hrisp.war path, then restart</pre>
+  <p class="muted">Migrations are additive (<span class="mono">CREATE TABLE IF NOT EXISTS</span> / <span class="mono">ALTER TABLE ADD COLUMN</span> with safe defaults) — no data-loss risk. <span class="cite">RUNTIME_ASSESSMENT_REPORT.md</span></p>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 6 · Setup &amp; Security</span></div>
+</section>
+
+<!-- ============ 7. LIST OF CHANGES ============ -->
+<section class="page">
+  <div class="secnum">Section 7</div>
+  <h2>List of HRIS Changes</h2>
+  <p>All tracked changes grouped by theme, with the primary evidence reference.</p>
+
+  <h3>7.1 Leave Management (new module)</h3>
+  <table>
+    <thead><tr><th style="width:44%">Change</th><th style="width:18%">Type</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Leave application (CS Form 6) capture &amp; lifecycle</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">d0d8be0</span></td></tr>
+      <tr><td>Employee's Leave Card ledger + running balances</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">d0d8be0</span></td></tr>
+      <tr><td>Monthly accrual (1.25 VL + 1.25 SL) posting</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">LeaveController</span></td></tr>
+      <tr><td>CS Form 6 &amp; Leave Card PDF exports (Jasper)</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">*.jrxml</span></td></tr>
+      <tr><td>Leave-type &amp; holiday CRUD + first-boot seeding</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">LeaveSettingsSeeder</span></td></tr>
+      <tr><td>Schema: 4 tables with FKs to <span class="mono">employee</span></td><td><span class="tag t-new">Schema</span></td><td><span class="cite">2026-leave-management.sql</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>7.2 PDS enhancements</h3>
+  <table>
+    <thead><tr><th style="width:44%">Change</th><th style="width:18%">Type</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Passport photo upload (preview, JPG/PNG, ≤5MB, CSRF)</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">CHANGES_SUMMARY.md</span></td></tr>
+      <tr><td>L&amp;D hours display text override (+ numeric fallback)</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">2025-ld-hours-display.sql</span></td></tr>
+      <tr><td>Work experience part-time flag</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">2025-we-part-time.sql</span></td></tr>
+      <tr><td>Government-ID date mask &amp; validation</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">CHANGES_SUMMARY.md</span></td></tr>
+      <tr><td>GSIS ID field surfaced on PDS P1 report</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">CHANGES_SUMMARY.md</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>7.3 Security &amp; fixes</h3>
+  <table>
+    <thead><tr><th style="width:44%">Change</th><th style="width:18%">Type</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Employee PDS self-edit with backend ownership checks</td><td><span class="tag t-fixed">Security</span></td><td><span class="cite">093043f</span> · <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></td></tr>
+      <tr><td>PDS validation bug — HR-only fields blocked save</td><td><span class="tag t-fixed">Fix</span></td><td><span class="cite">e906631</span> · <span class="cite">PDS_SELF_EDIT_BUG_FIX.md</span></td></tr>
+      <tr><td>Clearance: null-safe PDF, missing ID, addressTo binding</td><td><span class="tag t-fixed">Fix</span></td><td><span class="cite">5cb1379</span></td></tr>
+      <tr><td>Leave endpoints: role gating + Form 6 IDOR fix</td><td><span class="tag t-fixed">Security</span></td><td><span class="cite">b10c18b</span></td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 7 · List of Changes</span></div>
+</section>
+
+<!-- ============ 8. FIXES IMPLEMENTED ============ -->
+<section class="page">
+  <div class="secnum">Section 8</div>
+  <h2>Fixes Implemented</h2>
+  <p>Each fix is shown as <em>what was wrong</em> → <em>what changed</em>, with a citation to the change record.</p>
+
+  <h3>8.1 Leave module — server-side authorization <span class="cite">commit b10c18b</span></h3>
+  <p><strong>Before:</strong> Every leave endpoint was gated only by "authenticated." The UI hid admin controls from employees, but the server did not enforce it, so any <span class="mono">ROLE_EMPLOYEE</span> could call the endpoints directly.</p>
+  <p><strong>After:</strong> Admin/mutation endpoints are role-gated; the one dual-use PDF endpoint gets an ownership check.</p>
+  <pre>// SecurityConfig — admin &amp; mutation endpoints now require staff role
+.antMatchers(LEAVE_ADMIN).hasAnyAuthority("ROLE_ADMIN", "ROLE_HR")
+// LEAVE_ADMIN = /leaves, add/update/delete Leave Application &amp; Card Entry,
+//               /postLeaveAccrual, /holidays, /leave-types (+ save/delete)
+
+// LeaveController.exportForm6Pdf — /leaveForm6Pdf/{id} own-record-or-staff guard
+boolean isStaff = "ROLE_ADMIN".equals(t) || "ROLE_HR".equals(t);
+if (!isStaff &amp;&amp; !isOwnRecord) { response.sendError(SC_FORBIDDEN); return; }</pre>
+
+  <h3>8.2 PDS self-edit — backend ownership checks <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></h3>
+  <p><strong>Before:</strong> <em>"The backend had no access control on the save endpoints — any authenticated user could POST to them."</em> Restrictions were JavaScript-only.</p>
+  <p><strong>After:</strong> Ownership check added to <span class="mono">EmployeeController</span> and all 10 PDS sub-controllers; also prevents privilege escalation via <span class="mono">userType</span> tampering.</p>
+  <pre>Employee actorObj = (Employee) request.getSession().getAttribute("actorObj");
+boolean isAdmin = actorObj != null &amp;&amp; "ROLE_ADMIN".equals(actorObj.getUserType());
+boolean isOwnRecord = actorObj != null &amp;&amp; actorObj.getId() == entity.getEmployee().getId();
+if (!isAdmin &amp;&amp; !isOwnRecord) { /* redirect: Access denied */ }
+if (!isAdmin &amp;&amp; isOwnRecord) employee.setUserType(old.getUserType()); // no self-promotion</pre>
+
+  <h3>8.3 PDS save validation bug <span class="cite">commit e906631 · PDS_SELF_EDIT_BUG_FIX.md</span></h3>
+  <p><strong>Before:</strong> After enabling self-edit, employees hit "Mandatory fields marked in RED" because HR-only fields (employee no., assumption date, status, position, division) were validated as required though employees never fill them.</p>
+  <p><strong>After:</strong> HR-only fields are locked read-only/disabled client-side and restored from the database on save, so employees can submit and HR-managed values are never nulled.</p>
+
+  <h3>8.4 Clearance robustness <span class="cite">commit 5cb1379</span></h3>
+  <p>Null-safe PDF generation, a missing record ID on disapprove, and an <span class="mono">addressTo</span> binding issue were corrected in clearance processing.</p>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 8 · Fixes Implemented</span></div>
+</section>
+
+<!-- ============ 9. VULN — OLD ============ -->
+<section class="page">
+  <div class="secnum">Section 9</div>
+  <h2>Vulnerability Assessment — Old HRIS</h2>
+  <p>These findings describe the Old HRIS state. Their remediation status in the New HRIS is given in Section&nbsp;10.</p>
+
+  <table>
+    <thead><tr><th style="width:24%">Finding</th><th style="width:10%">Severity</th><th>Description &amp; exploit</th><th style="width:18%">Evidence</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>PDS save endpoints — no backend authorization</td>
+        <td><span class="tag t-high">High</span></td>
+        <td>Access control was JavaScript-only; the backend accepted a POST from any authenticated user. An employee could craft a request to edit another employee's PDS, or alter their own <span class="mono">userType</span> to escalate privileges.</td>
+        <td><span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></td>
+      </tr>
+      <tr>
+        <td>Leave mutation endpoints — broken access control</td>
+        <td><span class="tag t-high">High</span></td>
+        <td>New leave endpoints inherited the same "authenticated-only" model. An employee could self-approve leave (<span class="mono">status=APPROVED</span>), inflate credits via <span class="mono">/postLeaveAccrual</span> / <span class="mono">/addLeaveCardEntry</span>, and delete or modify records by numeric id (IDOR) — directly falsifying the leave-credit ledger.</td>
+        <td><span class="cite">LeaveController (pre-b10c18b)</span></td>
+      </tr>
+      <tr>
+        <td>Leave Form 6 PDF — IDOR / PII exposure</td>
+        <td><span class="tag t-med">Medium</span></td>
+        <td><span class="mono">/leaveForm6Pdf/{id}</span> took only a numeric id with no ownership check, so any authenticated user could enumerate ids and download any employee's CS Form 6 (name, position, salary, leave reasons).</td>
+        <td><span class="cite">LeaveController (pre-b10c18b)</span></td>
+      </tr>
+      <tr>
+        <td>Uniform default password across accounts</td>
+        <td><span class="tag t-med">Medium</span></td>
+        <td>Accounts were provisioned with a shared default password; without forced rotation, accounts are trivially guessable.</td>
+        <td><span class="cite">credentials list</span></td>
+      </tr>
+      <tr>
+        <td>Cross-module authorization pattern</td>
+        <td><span class="tag t-med">Medium</span></td>
+        <td>The "authenticated is enough" pattern spanned appointments, clearance and 201-file modules — the same class of exposure beyond PDS and leave.</td>
+        <td><span class="cite">controller review</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout bad"><strong>Root cause.</strong> The Old HRIS conflated <em>authentication</em> ("who are you") with <em>authorization</em> ("what may you do"). Because the UI hid controls, server-side checks were never added — so the security boundary lived only in the browser, where a user fully controls the requests.</div>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 9 · Vulnerability — Old HRIS</span></div>
+</section>
+
+<!-- ============ 10. VULN — NEW ============ -->
+<section class="page">
+  <div class="secnum">Section 10</div>
+  <h2>Vulnerability Assessment — New HRIS</h2>
+
+  <h3>10.1 Remediations verified</h3>
+  <table>
+    <thead><tr><th style="width:30%">Old finding</th><th style="width:12%">Status</th><th>Remediation</th></tr></thead>
+    <tbody>
+      <tr><td>PDS save — no authorization</td><td><span class="tag t-fixed">Fixed</span></td><td>Owner-or-admin checks on <span class="mono">EmployeeController</span> + 10 sub-controllers; <span class="mono">userType</span> preserved for non-admins <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></td></tr>
+      <tr><td>Leave mutation — broken access control</td><td><span class="tag t-fixed">Fixed</span></td><td>Admin/mutation endpoints gated to <span class="mono">ROLE_ADMIN</span>/<span class="mono">ROLE_HR</span> <span class="cite">b10c18b</span></td></tr>
+      <tr><td>Leave Form 6 PDF — IDOR</td><td><span class="tag t-fixed">Fixed</span></td><td>Own-record-or-staff guard added; returns 403 otherwise <span class="cite">b10c18b</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>10.2 Surfaces reviewed and found clean (leave module)</h3>
+  <table>
+    <thead><tr><th style="width:26%">Surface</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>SQL injection</td><td>None — all queries are Spring Data derived methods / <span class="mono">findById</span>; no string-concatenated SQL.</td></tr>
+      <tr><td>Cross-site scripting</td><td>None found — Thymeleaf auto-escaping; JavaScript inlining escapes values; no unescaped output.</td></tr>
+      <tr><td>CSRF</td><td>Protected — leave POST endpoints are not in the CSRF ignore list.</td></tr>
+      <tr><td>File upload</td><td>Not applicable — the leave module has no upload path.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>10.3 Residual risks &amp; follow-ups (not yet remediated)</h3>
+  <table>
+    <thead><tr><th style="width:30%">Risk</th><th style="width:10%">Sev.</th><th>Recommended follow-up</th></tr></thead>
+    <tbody>
+      <tr><td>Other modules still "authenticated-only"</td><td><span class="tag t-med">Med</span></td><td>Extend the same role/ownership gating to appointments, clearance, and 201-file endpoints.</td></tr>
+      <tr><td>Sensitive data in version-control history</td><td><span class="tag t-med">Med</span></td><td>Scrub database dumps and credential lists from git history; rotate anything exposed.</td></tr>
+      <tr><td>Uniform default password</td><td><span class="tag t-med">Med</span></td><td>Force a password change on first login for all accounts.</td></tr>
+      <tr><td>HR role coverage in navigation</td><td><span class="tag t-low">Low</span></td><td>Confirm whether <span class="mono">ROLE_HR</span> should see the leave admin navigation (currently admin-only in the menu, though HR is authorized on the endpoints).</td></tr>
+    </tbody>
+  </table>
+  <div class="callout good"><strong>Net change in posture.</strong> The two highest-impact exposures (PDS and leave access control) are closed and verified. The remaining items are consistency and hygiene follow-ups, not active exploit paths introduced by the new work.</div>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 10 · Vulnerability — New HRIS</span></div>
+</section>
+
+<!-- ============ 11. EVIDENCE ============ -->
+<section class="page">
+  <div class="secnum">Section 11</div>
+  <h2>Evidence and Proof of Changes</h2>
+  <p>Master mapping of claims to verifiable artifacts. Commit hashes can be inspected directly in the repository.</p>
+
+  <table>
+    <thead><tr><th style="width:30%">Claim</th><th style="width:26%">Artifact</th><th>Independent verification</th></tr></thead>
+    <tbody>
+      <tr><td>Leave module added (32 files, ~3,120 lines)</td><td><span class="cite">commit d0d8be0</span></td><td><span class="mono">git show --stat d0d8be0</span></td></tr>
+      <tr><td>Leave authorization enforced</td><td><span class="cite">commit b10c18b</span></td><td><span class="mono">git show b10c18b</span></td></tr>
+      <tr><td>PDS access control added</td><td><span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span>, <span class="cite">093043f</span></td><td>Read the change log; <span class="mono">git show 093043f</span></td></tr>
+      <tr><td>PDS validation bug fixed</td><td><span class="cite">PDS_SELF_EDIT_BUG_FIX.md</span>, <span class="cite">e906631</span></td><td><span class="mono">git show e906631</span></td></tr>
+      <tr><td>Clearance robustness fixes</td><td><span class="cite">commit 5cb1379</span></td><td><span class="mono">git show 5cb1379</span></td></tr>
+      <tr><td>Leave schema (4 tables, FKs)</td><td><span class="cite">2026-leave-management.sql</span></td><td>Open the migration file</td></tr>
+      <tr><td>PDS enhancements + additive migrations</td><td><span class="cite">CHANGES_SUMMARY.md</span>, <span class="cite">RUNTIME_ASSESSMENT_REPORT.md</span></td><td>Read the change logs</td></tr>
+      <tr><td>Security parameters (auth, roles, CSRF)</td><td><span class="cite">SecurityConfig.java</span></td><td>Read the security configuration</td></tr>
+      <tr><td>Deployment (live, nginx, hris_01)</td><td><span class="cite">summaryLinux.md</span></td><td>Read the deployment summary</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Visual proof — UAT screenshots</h3>
+  <p>Admin and employee UAT screenshot sets provide before/after visual evidence of the modules described. Representative files:</p>
+  <table>
+    <thead><tr><th style="width:34%">Area</th><th>Screenshot reference</th></tr></thead>
+    <tbody>
+      <tr><td>Employee dashboard &amp; login</td><td><span class="mono">DSH-EMP_employee_dashboard</span>, <span class="mono">LOG-01_login_page</span></td></tr>
+      <tr><td>PDS pages (10)</td><td><span class="mono">PDS-01_personal_info</span> … <span class="mono">PDS-10_government_id</span></td></tr>
+      <tr><td>Appointments / Clearance</td><td><span class="mono">APT-LIST_appointments_list</span>, <span class="mono">CLR-01_my_clearance</span></td></tr>
+      <tr><td>System settings (leave type, etc.)</td><td><span class="mono">SS-10_employee_status</span>, <span class="mono">SS-15_clearance_approvers</span></td></tr>
+      <tr><td>Change password</td><td><span class="mono">CPW-01_change_password</span></td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Screenshot sets are maintained with the project's UAT materials (admin and employee folders).</p>
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 11 · Evidence</span></div>
+</section>
+
+<!-- ============ 12. CONCLUSION ============ -->
+<section class="page">
+  <div class="secnum">Section 12</div>
+  <h2>Conclusion and Recommendations</h2>
+
+  <h3>Conclusion</h3>
+  <p>
+    The New HRIS is a clear improvement over the Old HRIS on both capability and security. It adds a complete,
+    procedure-aligned Leave Management module and closes the two highest-impact access-control exposures that
+    existed in the Old HRIS. The build is deployable (Java 11, Spring Boot 2.2.4, ~92&nbsp;MB WAR) and the database
+    migrations are additive and reversible-by-backup.
+  </p>
+  <div class="callout good"><strong>Deployment verdict: GO for the leave release.</strong> The leave module and its authorization fix are ready to deploy, provided the migration-then-WAR order in Section&nbsp;6.4 is followed and a database backup is taken first.</div>
+
+  <h3>Recommendations (prioritized)</h3>
+  <table>
+    <thead><tr><th style="width:8%">Priority</th><th style="width:34%">Action</th><th>Rationale</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag t-high">1</span></td><td>Force password change on first login for all accounts</td><td>Removes the shared-default-password risk before wider use.</td></tr>
+      <tr><td><span class="tag t-high">2</span></td><td>Extend role/ownership gating to appointments, clearance, 201-files</td><td>Same class of exposure fixed for PDS/leave still applies elsewhere.</td></tr>
+      <tr><td><span class="tag t-med">3</span></td><td>Scrub DB dumps &amp; credential lists from git history; rotate secrets</td><td>Sensitive PII/credentials should not persist in history.</td></tr>
+      <tr><td><span class="tag t-med">4</span></td><td>Run the documented leave UAT and capture screenshots</td><td>Completes the evidence trail for the new module.</td></tr>
+      <tr><td><span class="tag t-low">5</span></td><td>Confirm HR navigation for leave admin</td><td>Align the menu with the authorized <span class="mono">ROLE_HR</span> access.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Summary comparison</h3>
+  <table>
+    <thead><tr><th style="width:40%">Dimension</th><th style="width:30%">Old HRIS</th><th style="width:30%">New HRIS</th></tr></thead>
+    <tbody>
+      <tr><td>Leave processing</td><td>Not in system (paper)</td><td>Full module + PDF exports</td></tr>
+      <tr><td>PDS editing</td><td>HR/Admin only (UI-restricted)</td><td>Employee self-edit, backend-authorized</td></tr>
+      <tr><td>Authorization model</td><td>Authenticated = trusted</td><td>Role + record-ownership enforced</td></tr>
+      <tr><td>Leave credit integrity</td><td>Tamper-able (if module existed)</td><td>Staff-only; ledger protected</td></tr>
+      <tr><td>PII exposure (Form 6)</td><td>IDOR-readable</td><td>Owner-or-staff only</td></tr>
+      <tr><td>Deploy readiness</td><td>—</td><td>GO, with migration order</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot"><span>HRIS Manila Council — Old vs New HRIS Comparison</span><span>Section 12 · Conclusion — End of report</span></div>
+</section>
+
+</body>
+</html>

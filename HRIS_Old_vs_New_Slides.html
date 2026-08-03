@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRIS Manila Council — Old vs New HRIS (Slides)</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#55606f; --line:#d8dee7; --soft:#f4f6f9;
+    --navy:#1f3a5f; --accent:#0b5cad; --good:#1a7f4b; --warn:#b26a00; --bad:#b4232a;
+    --code:#f2f4f7;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  html,body{margin:0; height:100%;}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#e9edf2; color:var(--ink); overflow:hidden;
+  }
+  .deck{height:100vh; width:100vw; position:relative; background:#fff;}
+  .slide{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    padding:5.4vh 6vw 8vh; background:#fff;
+  }
+  .slide.active{display:flex; animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  .eyebrow{color:var(--accent); font-weight:700; letter-spacing:2px; text-transform:uppercase; font-size:1.5vh; margin-bottom:1.4vh;}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:6vh; margin:0 0 2vh; line-height:1.1; color:var(--navy);}
+  h2{font-family:Georgia,serif; font-size:4.2vh; margin:0 0 2.4vh; color:var(--navy); border-bottom:3px solid var(--navy); padding-bottom:1.2vh;}
+  h3{color:var(--accent); font-size:2.4vh; margin:2vh 0 1vh; font-family:Georgia,serif;}
+  p{font-size:2.3vh; line-height:1.5; color:var(--ink); margin:.5vh 0;}
+  ul{font-size:2.35vh; line-height:1.55; margin:.6vh 0; padding-left:3.2vh;}
+  li{margin:1.05vh 0;}
+  .muted{color:var(--muted);} .small{font-size:1.9vh;}
+  .cite{font-family:"Consolas",Menlo,monospace; font-size:1.65vh; color:var(--muted);
+    background:#eef2f7; border:1px solid #dbe3ec; border-radius:4px; padding:.1vh .8vh;}
+  .mono{font-family:"Consolas",Menlo,monospace;}
+  table{border-collapse:collapse; width:100%; margin:1.4vh 0; font-size:2vh;}
+  th,td{border:1px solid var(--line); padding:1.1vh 1.4vh; text-align:left; vertical-align:top;}
+  th{background:var(--navy); color:#fff; font-weight:600;}
+  tbody tr:nth-child(even){background:var(--soft);}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:3vw; flex:1;}
+  .panel{background:#fff; border:1px solid var(--line); border-radius:10px; padding:2.2vh 2.2vw; box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .panel.old{border-top:4px solid var(--warn);} .panel.new{border-top:4px solid var(--good);}
+  .panel h3{margin-top:0;}
+  .tag{display:inline-block; font-size:1.5vh; font-weight:700; padding:.2vh 1vh; border-radius:20px; color:#fff; text-transform:uppercase; white-space:nowrap;}
+  .t-high{background:var(--bad);} .t-med{background:var(--warn);} .t-low{background:#6b7280;} .t-fixed{background:var(--good);} .t-new{background:var(--accent);}
+  pre{background:var(--code); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px;
+    padding:1.6vh 1.8vw; font-family:"Consolas",Menlo,monospace; font-size:1.85vh; line-height:1.5; overflow:auto; color:#243b53;}
+  .fill{flex:1;}
+  .callout{background:var(--soft); border:1px solid var(--line); border-left:5px solid var(--good);
+    border-radius:8px; padding:1.8vh 2vw; font-size:2.2vh; margin-top:1.6vh; color:var(--ink);}
+  .callout.bad{border-left-color:var(--bad);}
+  .callout.accent{border-left-color:var(--accent);}
+  .footer{position:absolute; bottom:2.4vh; left:6vw; right:6vw; display:flex; justify-content:space-between;
+    align-items:center; font-size:1.6vh; color:var(--muted); border-top:1px solid var(--line); padding-top:1.4vh;}
+  .cover-wrap{flex:1; display:flex; flex-direction:column; justify-content:center;}
+  .rule{width:80px; height:5px; background:var(--accent); margin:2.6vh 0;}
+  .nav{position:absolute; bottom:2vh; right:6vw; z-index:10;}
+  .nav button{background:#fff; color:var(--navy); border:1px solid var(--line); border-radius:6px;
+    font-size:2.2vh; width:4.4vh; height:4.4vh; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.08);}
+  .nav button:hover{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .progress{position:absolute; top:0; left:0; height:5px; background:var(--accent); transition:width .3s; z-index:5;}
+  .hint{position:absolute; bottom:2.2vh; left:6vw; font-size:1.5vh; color:var(--muted);}
+  @media print{
+    @page{size:landscape; margin:0;}
+    body{overflow:visible; background:#fff;}
+    .slide{display:flex !important; position:relative; height:100vh; page-break-after:always; padding:7vh 7vw;
+      opacity:1 !important; animation:none !important; transform:none !important;}
+    .nav,.hint,.progress{display:none;}
+  }
+  .kv{width:100%; border-collapse:collapse;}
+  .kv td{border:none; border-bottom:1px solid var(--line); padding:.8vh .4vw; font-size:1.9vh;}
+  .kv td:first-child{color:var(--muted); width:34%;}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="progress" id="progress"></div>
+
+  <!-- 0 TITLE -->
+  <section class="slide active">
+    <div class="cover-wrap">
+      <div class="eyebrow">Management Review · Confidential</div>
+      <h1>HRIS Manila Council</h1>
+      <div class="rule"></div>
+      <p style="font-size:3.2vh; font-family:Georgia,serif; color:var(--navy);">Comparison of Old HRIS and New HRIS</p>
+      <p class="muted" style="margin-top:1.5vh;">Leave Management Module · Setup &amp; Security Parameters<br>Tracked Changes, Fixes &amp; Vulnerability Assessment</p>
+      <table class="kv" style="max-width:44vw; margin-top:3vh;">
+        <tr><td>Document</td><td>Old vs New HRIS — Evidence-Based Comparison</td></tr>
+        <tr><td>Prepared for</td><td>Management / Project Governance</td></tr>
+        <tr><td>System</td><td>HRIS Manila Council (manilacitycouncil.com)</td></tr>
+        <tr><td>Report date</td><td>13 July 2026</td></tr>
+        <tr><td>Classification</td><td>Internal — contains security findings</td></tr>
+      </table>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>Press → or Space to advance</span></div>
+  </section>
+
+  <!-- 1 EXEC -->
+  <section class="slide">
+    <div class="eyebrow">Section 1</div>
+    <h2>Executive Summary</h2>
+    <ul class="fill">
+      <li><strong>New capability:</strong> a full Leave Management module — CS Form 6, Leave Card ledger, settings, PDF exports (32 files, ~3,120 lines) <span class="cite">d0d8be0</span></li>
+      <li><strong>Security hardening:</strong> server-side authorization enforced on leave endpoints — closes privilege escalation &amp; IDOR <span class="cite">b10c18b</span></li>
+      <li><strong>Earlier remediation:</strong> PDS self-edit given real backend ownership checks <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></li>
+      <li><strong>Quality:</strong> 5 additive PDS enhancements; clean build, ~92 MB WAR, Java 11 / Spring Boot 2.2.4</li>
+    </ul>
+    <div class="callout accent">Bottom line: the New HRIS is both larger in capability and stronger in security — shifting from <em>"authenticated users are trusted"</em> to <em>"actions authorized by role and ownership."</em></div>
+    <div class="footer"><span>HRIS Manila Council</span><span>1 · Executive Summary</span></div>
+  </section>
+
+  <!-- 2 SCOPE -->
+  <section class="slide">
+    <div class="eyebrow">Section 2</div>
+    <h2>Scope of Review</h2>
+    <p class="muted">Documentation / back-search task — no code changed to produce this.</p>
+    <div class="cols">
+      <div class="panel old"><h3>Old HRIS</h3><p>System before this engagement: PDS, appointments, clearance, service record, 201 files — with UI-level access restrictions.</p></div>
+      <div class="panel new"><h3>New HRIS</h3><p>Adds Leave Management, PDS enhancements, and server-side authorization hardening.</p></div>
+    </div>
+    <h3>Sources back-searched</h3>
+    <p class="small">Commit history · change logs (<span class="mono">CHANGES_SUMMARY</span>, <span class="mono">RUNTIME_ASSESSMENT_REPORT</span>, <span class="mono">EMPLOYEE_PDS_EDIT_CHANGES</span>, <span class="mono">LEAVE_MODULE_BLUEPRINT</span>) · migrations · source (<span class="mono">SecurityConfig</span>, leave package) · UAT screenshots</p>
+    <div class="footer"><span>HRIS Manila Council</span><span>2 · Scope of Review</span></div>
+  </section>
+
+  <!-- 3 OLD -->
+  <section class="slide">
+    <div class="eyebrow">Section 3</div>
+    <h2>Old HRIS Overview</h2>
+    <div class="cols">
+      <div>
+        <h3>Modules</h3>
+        <ul class="small"><li>Personal Data Sheet (CS Form 212)</li><li>Appointments · Clearance</li><li>Service Record · 201 Files</li><li>System Settings · Auth / Change Password</li></ul>
+      </div>
+      <div>
+        <h3>Stack</h3>
+        <ul class="small"><li>Java 11 · Spring Boot 2.2.4</li><li>WAR + embedded Tomcat (~92 MB)</li><li>MySQL <span class="mono">hris_01</span> · JasperReports</li><li>nginx + Let's Encrypt · live at manilacitycouncil.com</li></ul>
+      </div>
+    </div>
+    <div class="callout bad">Security characteristic: restrictions enforced in the <em>browser</em>; the backend authorized requests only as "any authenticated user." Root of the Section 9 findings. <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></div>
+    <div class="footer"><span>HRIS Manila Council</span><span>3 · Old HRIS Overview</span></div>
+  </section>
+
+  <!-- 4 NEW -->
+  <section class="slide">
+    <div class="eyebrow">Section 4</div>
+    <h2>New HRIS Overview</h2>
+    <div class="cols">
+      <div class="panel old"><h3>Old HRIS</h3><ul class="small"><li>PDS, Appointments, Clearance, Service Record, 201 Files</li><li>PDS: HR/Admin edit only</li><li>UI restrictions; backend trusts any authenticated user</li><li>No leave processing</li></ul></div>
+      <div class="panel new"><h3>New HRIS</h3><ul class="small"><li>All of the above <strong>+ Leave Management</strong></li><li>PDS employee self-edit with ownership checks</li><li>Role gating on leave admin/mutation endpoints</li><li>PDS enhancements ×5 · leave-type &amp; holiday settings</li></ul></div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>4 · New HRIS Overview</span></div>
+  </section>
+
+  <!-- 5 LEAVE -->
+  <section class="slide">
+    <div class="eyebrow">Section 5</div>
+    <h2>Added Module: Leave Management</h2>
+    <div class="cols">
+      <div>
+        <h3>Workflow</h3>
+        <ul class="small"><li>Record CS Form 6 application</li><li>Auto-certify VL/SL credits</li><li>Recommend → Approve / Disapprove (exigency = no deduction)</li><li>Post to Leave Card ledger</li><li>Export Form 6 &amp; Leave Card PDF</li></ul>
+      </div>
+      <div>
+        <h3>Data model <span class="cite">2026-leave-management.sql</span></h3>
+        <ul class="small"><li><span class="mono">leave_application</span> — Form 6</li><li><span class="mono">leave_card_entry</span> — ledger</li><li><span class="mono">leave_type</span> · <span class="mono">holiday</span> — settings</li><li>FKs → <span class="mono">employee</span></li></ul>
+      </div>
+    </div>
+    <div class="callout accent">Ledger: monthly accrual 1.25 VL + 1.25 SL; only "V"/"S" entries deduct; special leaves recorded without changing balances. Employees get a <strong>read-only</strong> <span class="mono">/my-leaves</span> view.</div>
+    <div class="footer"><span>HRIS Manila Council</span><span>5 · Leave Management</span></div>
+  </section>
+
+  <!-- 6 SETUP/SECURITY -->
+  <section class="slide">
+    <div class="eyebrow">Section 6</div>
+    <h2>Setup &amp; Security Parameters</h2>
+    <div class="cols">
+      <div>
+        <h3>Setup</h3>
+        <ul class="small"><li>JDK 11 · Maven → <span class="mono">target/hrisp.war</span></li><li>MySQL <span class="mono">hris_01</span></li><li>Profiles: <span class="mono">SPRING_PROFILES_ACTIVE</span> (dev/prod)</li><li>Secrets: <span class="mono">DB_USERNAME/PASSWORD</span>, <span class="mono">EMPLOYEE_DEFAULT_PASSWORD</span> (env, not committed)</li></ul>
+      </div>
+      <div>
+        <h3>Security</h3>
+        <ul class="small"><li>Form login · <span class="mono">MigratingPasswordEncoder</span> (BCrypt)</li><li>Roles: <span class="mono">ROLE_ADMIN / HR / EMPLOYEE</span></li><li><span class="mono">empHashCode</span> capability token on self-service</li><li>CSRF on (leave POSTs protected)</li><li>Upload allow-list + 5 MB cap</li></ul>
+      </div>
+    </div>
+    <p class="small muted">Migration order: back up DB → apply <span class="mono">2026-leave-management.sql</span> + PDS migrations (additive) → deploy WAR → restart.</p>
+    <div class="footer"><span>HRIS Manila Council</span><span>6 · Setup &amp; Security</span></div>
+  </section>
+
+  <!-- 7 CHANGES -->
+  <section class="slide">
+    <div class="eyebrow">Section 7</div>
+    <h2>List of HRIS Changes</h2>
+    <table>
+      <thead><tr><th style="width:52%">Change</th><th style="width:16%">Type</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>Leave module (Form 6, ledger, PDFs, settings)</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">d0d8be0</span></td></tr>
+        <tr><td>PDS enhancements ×5 (photo, L&amp;D, part-time, date, GSIS)</td><td><span class="tag t-new">Feature</span></td><td><span class="cite">CHANGES_SUMMARY</span></td></tr>
+        <tr><td>PDS self-edit + backend ownership checks</td><td><span class="tag t-fixed">Security</span></td><td><span class="cite">093043f</span></td></tr>
+        <tr><td>PDS validation bug (HR-only fields)</td><td><span class="tag t-fixed">Fix</span></td><td><span class="cite">e906631</span></td></tr>
+        <tr><td>Clearance null-safe PDF / ID / binding</td><td><span class="tag t-fixed">Fix</span></td><td><span class="cite">5cb1379</span></td></tr>
+        <tr><td>Leave role gating + Form 6 IDOR fix</td><td><span class="tag t-fixed">Security</span></td><td><span class="cite">b10c18b</span></td></tr>
+      </tbody>
+    </table>
+    <div class="footer"><span>HRIS Manila Council</span><span>7 · List of Changes</span></div>
+  </section>
+
+  <!-- 8 FIXES -->
+  <section class="slide">
+    <div class="eyebrow">Section 8</div>
+    <h2>Fixes Implemented</h2>
+    <h3>Leave authorization <span class="cite">b10c18b</span></h3>
+    <pre>.antMatchers(LEAVE_ADMIN).hasAnyAuthority("ROLE_ADMIN","ROLE_HR")   // gate admin/mutations
+// /leaveForm6Pdf/{id}: own-record-or-staff, else 403  (IDOR fix)</pre>
+    <h3>PDS self-edit access control <span class="cite">EMPLOYEE_PDS_EDIT_CHANGES.md</span></h3>
+    <pre>isOwnRecord = actor.getId() == entity.getEmployee().getId();
+if (!isAdmin &amp;&amp; !isOwnRecord) return denied;      // no cross-employee edit
+if (!isAdmin) employee.setUserType(old.getUserType());  // no self-promotion</pre>
+    <p class="small muted">Also: PDS validation bug fixed (HR-only fields restored from DB) <span class="cite">e906631</span>; clearance robustness <span class="cite">5cb1379</span>.</p>
+    <div class="footer"><span>HRIS Manila Council</span><span>8 · Fixes Implemented</span></div>
+  </section>
+
+  <!-- 9 VULN OLD -->
+  <section class="slide">
+    <div class="eyebrow">Section 9</div>
+    <h2>Vulnerability Assessment — Old HRIS</h2>
+    <table>
+      <thead><tr><th style="width:30%">Finding</th><th style="width:12%">Sev.</th><th>Exploit</th></tr></thead>
+      <tbody>
+        <tr><td>PDS saves — no backend authorization</td><td><span class="tag t-high">High</span></td><td>Any authenticated user edits others' PDS / escalates <span class="mono">userType</span></td></tr>
+        <tr><td>Leave mutations — broken access control</td><td><span class="tag t-high">High</span></td><td>Self-approve leave, inflate credits, IDOR-delete records</td></tr>
+        <tr><td>Form 6 PDF — IDOR</td><td><span class="tag t-med">Med</span></td><td>Enumerate ids → download anyone's PII</td></tr>
+        <tr><td>Uniform default password</td><td><span class="tag t-med">Med</span></td><td>Guessable accounts without forced rotation</td></tr>
+      </tbody>
+    </table>
+    <div class="callout bad">Root cause: authentication was conflated with authorization — the security boundary lived only in the browser.</div>
+    <div class="footer"><span>HRIS Manila Council</span><span>9 · Vulnerability — Old HRIS</span></div>
+  </section>
+
+  <!-- 10 VULN NEW -->
+  <section class="slide">
+    <div class="eyebrow">Section 10</div>
+    <h2>Vulnerability Assessment — New HRIS</h2>
+    <div class="cols">
+      <div>
+        <h3>Remediated</h3>
+        <ul class="small"><li>PDS saves — owner/admin checks <span class="tag t-fixed">Fixed</span></li><li>Leave mutations — role-gated <span class="tag t-fixed">Fixed</span></li><li>Form 6 IDOR — owner/staff guard <span class="tag t-fixed">Fixed</span></li></ul>
+        <h3>Reviewed clean</h3>
+        <ul class="small"><li>SQLi — Spring Data queries</li><li>XSS — Thymeleaf escaping</li><li>CSRF — active on leave POSTs</li></ul>
+      </div>
+      <div>
+        <h3>Residual risks (follow-ups)</h3>
+        <ul class="small"><li>Other modules still "authenticated-only" <span class="tag t-med">Med</span></li><li>Sensitive data in git history <span class="tag t-med">Med</span></li><li>Default password rotation <span class="tag t-med">Med</span></li><li>HR nav for leave admin <span class="tag t-low">Low</span></li></ul>
+      </div>
+    </div>
+    <div class="callout accent">Two highest-impact exposures closed &amp; verified; remaining items are hygiene/consistency, not active exploit paths.</div>
+    <div class="footer"><span>HRIS Manila Council</span><span>10 · Vulnerability — New HRIS</span></div>
+  </section>
+
+  <!-- 11 EVIDENCE -->
+  <section class="slide">
+    <div class="eyebrow">Section 11</div>
+    <h2>Evidence &amp; Proof of Changes</h2>
+    <table>
+      <thead><tr><th style="width:44%">Claim</th><th style="width:26%">Artifact</th><th>Verify</th></tr></thead>
+      <tbody>
+        <tr><td>Leave module added</td><td><span class="cite">d0d8be0</span></td><td><span class="mono">git show --stat d0d8be0</span></td></tr>
+        <tr><td>Leave authorization enforced</td><td><span class="cite">b10c18b</span></td><td><span class="mono">git show b10c18b</span></td></tr>
+        <tr><td>PDS access control</td><td><span class="cite">093043f</span></td><td>change log + commit</td></tr>
+        <tr><td>Leave schema</td><td><span class="cite">2026-leave-management.sql</span></td><td>open migration</td></tr>
+        <tr><td>Security parameters</td><td><span class="cite">SecurityConfig.java</span></td><td>read config</td></tr>
+      </tbody>
+    </table>
+    <p class="small muted">Visual proof: UAT screenshot sets (admin + employee) — PDS pages, dashboards, appointments, clearance, system settings, change-password.</p>
+    <div class="footer"><span>HRIS Manila Council</span><span>11 · Evidence</span></div>
+  </section>
+
+  <!-- 12 CONCLUSION -->
+  <section class="slide">
+    <div class="eyebrow">Section 12</div>
+    <h2>Conclusion &amp; Recommendations</h2>
+    <div class="callout">Deployment verdict: <strong>GO for the leave release</strong> — follow migration-then-WAR order and back up the database first.</div>
+    <h3>Prioritized recommendations</h3>
+    <ul class="small">
+      <li><span class="tag t-high">1</span> Force password change on first login (all accounts)</li>
+      <li><span class="tag t-high">2</span> Extend role/ownership gating to appointments, clearance, 201-files</li>
+      <li><span class="tag t-med">3</span> Scrub DB dumps &amp; credentials from git history; rotate secrets</li>
+      <li><span class="tag t-med">4</span> Run leave UAT and capture screenshots</li>
+      <li><span class="tag t-low">5</span> Confirm HR navigation for leave admin</li>
+    </ul>
+    <div class="footer"><span>HRIS Manila Council</span><span>12 · Conclusion — Thank you</span></div>
+  </section>
+
+  <div class="nav">
+    <button onclick="go(-1)" aria-label="Previous">&#8249;</button>
+    <button onclick="go(1)" aria-label="Next">&#8250;</button>
+  </div>
+  <div class="hint">← → / Space to navigate · F for fullscreen · P to print</div>
+</div>
+
+<script>
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    document.getElementById('progress').style.width = ((i)/(slides.length-1)*100) + '%';
+  }
+  function go(d){ show(i+d); }
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); go(1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(-1); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+    else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();} }
+    else if(e.key==='p'||e.key==='P'){ window.print(); }
+  });
+  show(0);
+</script>
+</body>
+</html>

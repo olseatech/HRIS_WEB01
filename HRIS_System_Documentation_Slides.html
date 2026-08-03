@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRIS Manila Council — System &amp; Process Flow Documentation (Slides)</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#55606f; --line:#d8dee7; --soft:#f4f6f9;
+    --navy:#1f3a5f; --accent:#0b5cad; --good:#1a7f4b; --warn:#b26a00; --bad:#b4232a;
+    --code:#f2f4f7;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  html,body{margin:0; height:100%;}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#e9edf2; color:var(--ink); overflow:hidden;
+  }
+  .deck{height:100vh; width:100vw; position:relative; background:#fff;}
+  .slide{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    padding:5.4vh 6vw 8vh; background:#fff;
+  }
+  .slide.active{display:flex; animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  .eyebrow{color:var(--accent); font-weight:700; letter-spacing:2px; text-transform:uppercase; font-size:1.5vh; margin-bottom:1.4vh;}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:6vh; margin:0 0 2vh; line-height:1.1; color:var(--navy);}
+  h2{font-family:Georgia,serif; font-size:4.2vh; margin:0 0 2.4vh; color:var(--navy); border-bottom:3px solid var(--navy); padding-bottom:1.2vh;}
+  h3{color:var(--accent); font-size:2.4vh; margin:2vh 0 1vh; font-family:Georgia,serif;}
+  p{font-size:2.3vh; line-height:1.5; color:var(--ink); margin:.5vh 0;}
+  ul{font-size:2.35vh; line-height:1.55; margin:.6vh 0; padding-left:3.2vh;}
+  li{margin:1.05vh 0;}
+  .muted{color:var(--muted);} .small{font-size:1.9vh;}
+  .cite{font-family:"Consolas",Menlo,monospace; font-size:1.65vh; color:var(--muted);
+    background:#eef2f7; border:1px solid #dbe3ec; border-radius:4px; padding:.1vh .8vh;}
+  .mono{font-family:"Consolas",Menlo,monospace;}
+  table{border-collapse:collapse; width:100%; margin:1.4vh 0; font-size:2vh;}
+  th,td{border:1px solid var(--line); padding:1.1vh 1.4vh; text-align:left; vertical-align:top;}
+  th{background:var(--navy); color:#fff; font-weight:600;}
+  tbody tr:nth-child(even){background:var(--soft);}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:3vw; flex:1;}
+  .cols3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:2vw; flex:1;}
+  .panel{background:#fff; border:1px solid var(--line); border-radius:10px; padding:2.2vh 2.2vw; box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .panel.core{border-top:4px solid var(--navy);} .panel.flow{border-top:4px solid var(--warn);}
+  .panel h3{margin-top:0;}
+  .tag{display:inline-block; font-size:1.5vh; font-weight:700; padding:.2vh 1vh; border-radius:20px; color:#fff; text-transform:uppercase; white-space:nowrap;}
+  .t-core{background:var(--navy);} .t-self{background:var(--accent);} .t-flow{background:var(--warn);}
+  .t-config{background:#6b7280;} .t-report{background:var(--good);}
+  pre{background:var(--code); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px;
+    padding:1.6vh 1.8vw; font-family:"Consolas",Menlo,monospace; font-size:1.85vh; line-height:1.5; overflow:auto; color:#243b53;}
+  .fill{flex:1;}
+  .callout{background:var(--soft); border:1px solid var(--line); border-left:5px solid var(--good);
+    border-radius:8px; padding:1.8vh 2vw; font-size:2.2vh; margin-top:1.6vh; color:var(--ink);}
+  .callout.bad{border-left-color:var(--bad);}
+  .callout.accent{border-left-color:var(--accent);}
+  .footer{position:absolute; bottom:2.4vh; left:6vw; right:6vw; display:flex; justify-content:space-between;
+    align-items:center; font-size:1.6vh; color:var(--muted); border-top:1px solid var(--line); padding-top:1.4vh;}
+  .cover-wrap{flex:1; display:flex; flex-direction:column; justify-content:center;}
+  .rule{width:80px; height:5px; background:var(--accent); margin:2.6vh 0;}
+  .nav{position:absolute; bottom:2vh; right:6vw; z-index:10;}
+  .nav button{background:#fff; color:var(--navy); border:1px solid var(--line); border-radius:6px;
+    font-size:2.2vh; width:4.4vh; height:4.4vh; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.08);}
+  .nav button:hover{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .progress{position:absolute; top:0; left:0; height:5px; background:var(--accent); transition:width .3s; z-index:5;}
+  .hint{position:absolute; bottom:2.2vh; left:6vw; font-size:1.5vh; color:var(--muted);}
+  @media print{
+    @page{size:landscape; margin:0;}
+    body{overflow:visible; background:#fff;}
+    .slide{display:flex !important; position:relative; height:100vh; page-break-after:always; padding:7vh 7vw;
+      opacity:1 !important; animation:none !important; transform:none !important;}
+    .nav,.hint,.progress{display:none;}
+  }
+  .kv{width:100%; border-collapse:collapse;}
+  .kv td{border:none; border-bottom:1px solid var(--line); padding:.8vh .4vw; font-size:1.9vh;}
+  .kv td:first-child{color:var(--muted); width:34%;}
+
+  /* ---- Process-flow diagram components ---- */
+  .flow-h{display:flex; flex-wrap:wrap; align-items:center; gap:.8vh; margin:1vh 0;}
+  .flow-h .box{background:var(--soft); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:6px; padding:1vh 1.4vh; font-size:1.85vh; color:var(--ink);}
+  .flow-h .arrow{color:var(--accent); font-weight:700; font-size:2.2vh;}
+  .flow-decision{margin:1.2vh 0;}
+  .flow-decision .head{background:var(--navy); color:#fff; border-radius:6px; padding:1vh 1.6vh;
+    text-align:center; font-size:1.9vh; font-weight:700; max-width:40vw; margin:0 auto;}
+  .flow-decision .down{text-align:center; color:var(--accent); font-size:2.4vh; margin:.2vh 0;}
+  .flow-decision .branches{display:flex; gap:1.4vw; justify-content:center; margin-top:.2vh; flex-wrap:wrap;}
+  .flow-decision .branch{flex:1; min-width:16vw; max-width:24vw;}
+  .flow-decision .branch .label{text-align:center; font-size:1.55vh; color:var(--accent); font-weight:700;
+    margin-bottom:.4vh; text-transform:uppercase;}
+  .flow-decision .branch .box{background:#fff; border:1px solid var(--line); border-top:3px solid var(--accent);
+    border-radius:6px; padding:1vh 1.2vh; font-size:1.7vh; text-align:center;}
+  .flow-decision .branch .box.end-good{border-top-color:var(--good);}
+  .flow-decision .branch .box.end-bad{border-top-color:var(--bad);}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="progress" id="progress"></div>
+
+  <!-- 0 TITLE -->
+  <section class="slide active">
+    <div class="cover-wrap">
+      <div class="eyebrow">Internal Documentation · City Council of Manila</div>
+      <h1>HRIS Manila Council</h1>
+      <div class="rule"></div>
+      <p style="font-size:3.2vh; font-family:Georgia,serif; color:var(--navy);">System &amp; Process Flow Documentation</p>
+      <p class="muted" style="margin-top:1.5vh;">Complete Modules · Feature Summary · End-to-End Process Flows · Workflow Diagrams · Roles &amp; Responsibilities</p>
+      <table class="kv" style="max-width:46vw; margin-top:3vh;">
+        <tr><td>Requested under</td><td>CR Request ID 016 — "HRIS Process flow for all modules and features for documentation"</td></tr>
+        <tr><td>Requested by</td><td>Chief of Staff Gino Boongaling</td></tr>
+        <tr><td>System</td><td>HRIS Manila Council (manilacitycouncil.com)</td></tr>
+        <tr><td>Report date</td><td>22 July 2026</td></tr>
+      </table>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>Press → or Space to advance</span></div>
+  </section>
+
+  <!-- 1 EXEC -->
+  <section class="slide">
+    <div class="eyebrow">Section 1</div>
+    <h2>Executive Summary</h2>
+    <p class="muted">Documents the system as it exists today — modules, features, end-to-end flows, and how modules depend on each other.</p>
+    <ul class="fill">
+      <li><strong>15 functional modules</strong> across Core Records, Self-Service, Workflow &amp; Approvals, Configuration, and Reporting</li>
+      <li><strong>6-role authorization model</strong>: ADMIN, HR, EMPLOYEE, SUPERVISOR, COUNCIL, VICEMAYOR</li>
+      <li><strong>Multi-stage Leave decision workflow</strong> spanning Employee, HR, Supervisor, Council Secretary and Vice-Mayor accounts</li>
+      <li>Built continuously through Change Requests <span class="cite">CR-015 → CR-023</span>, not a single rewrite</li>
+    </ul>
+    <div class="callout accent">This is a documentation exercise — no application code was changed to produce it.</div>
+    <div class="footer"><span>HRIS Manila Council</span><span>1 · Executive Summary</span></div>
+  </section>
+
+  <!-- 2 OVERVIEW -->
+  <section class="slide">
+    <div class="eyebrow">Section 2</div>
+    <h2>HRIS Overview</h2>
+    <div class="cols">
+      <div>
+        <h3>Who uses it</h3>
+        <ul class="small"><li>HRM Section (HR/Admin) — full 201-file, leave, clearance management</li><li>All Council employees — self-service PDS, leave, clearance</li><li>Supervisors, Council Secretary, Vice-Mayor — leave decision stages</li></ul>
+      </div>
+      <div>
+        <h3>Stack &amp; scale</h3>
+        <ul class="small"><li>Java 11 · Spring Boot 2.2.4 · MySQL <span class="mono">hris_01</span></li><li>nginx + Let's Encrypt, <span class="mono">systemd</span>-managed</li><li><strong>625</strong> active employee records <span class="cite">verified 22-Jul-2026</span></li></ul>
+      </div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>2 · HRIS Overview</span></div>
+  </section>
+
+  <!-- 3 ROLES -->
+  <section class="slide">
+    <div class="eyebrow">Section 3</div>
+    <h2>User Roles &amp; Responsibilities</h2>
+    <table>
+      <thead><tr><th style="width:18%">Role</th><th style="width:56%">Responsibilities</th><th>Landing page</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">ROLE_ADMIN</td><td>Full system administration</td><td>Dashboard</td></tr>
+        <tr><td class="mono">ROLE_HR</td><td>Records mgmt, leave screening, acting-official fallback on every stage</td><td>Dashboard</td></tr>
+        <tr><td class="mono">ROLE_EMPLOYEE</td><td>Self-service: own PDS, leave, clearance</td><td>Dashboard</td></tr>
+        <tr><td class="mono">ROLE_SUPERVISOR</td><td>Endorse / deny / return-to-HR leaves at FOR_ENDORSEMENT</td><td>Leave Approvals</td></tr>
+        <tr><td class="mono">ROLE_COUNCIL</td><td>Council Review; finalizes &lt;15-day leaves herself</td><td>Leave Approvals</td></tr>
+        <tr><td class="mono">ROLE_VICEMAYOR</td><td>Final approval/denial/return for leaves ≥15 days</td><td>Leave Approvals</td></tr>
+      </tbody>
+    </table>
+    <div class="footer"><span>HRIS Manila Council</span><span>3 · User Roles &amp; Responsibilities</span></div>
+  </section>
+
+  <!-- 4 MODULES -->
+  <section class="slide">
+    <div class="eyebrow">Section 4</div>
+    <h2>Complete HRIS Modules</h2>
+    <div class="cols3 fill">
+      <div class="panel core"><h3>Core Records</h3><ul class="small"><li>Employee Records</li><li>Personal Data Sheet</li><li>Appointments</li><li>Service Record</li><li>201 Files</li><li>Archive</li></ul></div>
+      <div class="panel flow"><h3>Workflow &amp; Approvals</h3><ul class="small"><li>Leave Management</li><li>Clearance</li><li>Training &amp; Seminar</li></ul></div>
+      <div class="panel"><h3>Self-Service, Config &amp; Reporting</h3><ul class="small"><li>Notifications · Dashboard/Nav</li><li>Auth, Roles &amp; Password</li><li>System Settings (~22 screens)</li><li>Reports &amp; PDF Exports</li><li>Year-End Processing</li></ul></div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>4 · Complete HRIS Modules</span></div>
+  </section>
+
+  <!-- 5 FEATURES CORE -->
+  <section class="slide">
+    <div class="eyebrow">Section 5</div>
+    <h2>Feature Summary — Core Records</h2>
+    <div class="cols">
+      <div>
+        <ul class="small">
+          <li><strong>Employee Records:</strong> the 201-file master, credentials/role provisioning</li>
+          <li><strong>PDS:</strong> 10 sub-sections, employee self-edit with server-side ownership checks, "N/A" print for blanks</li>
+          <li><strong>Appointments / Service Record:</strong> HR-maintained history + document attachments</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="small">
+          <li><strong>201 Files:</strong> general document repository by Document Type</li>
+          <li><strong>Archive (CR-023):</strong> SALN / Resigned / Leaves folders, now <strong>admin-manageable</strong> — add/rename/delete via Manage Folders, delete blocked while files exist</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>5 · Feature Summary — Core Records</span></div>
+  </section>
+
+  <!-- 6 FEATURES WORKFLOW -->
+  <section class="slide">
+    <div class="eyebrow">Section 6</div>
+    <h2>Feature Summary — Workflow &amp; Approvals</h2>
+    <ul class="fill">
+      <li><strong>Leave Management:</strong> CS Form 6 filing → multi-actor decision flow → Leave Card posting; appeal/cancel; monthly accrual; Leave Tracker calendar; CS Form 6 / Leave Card / Verification Receipt PDFs</li>
+      <li><strong>Clearance:</strong> employee files, each configured approver signs off, approved/disapproved PDF</li>
+      <li><strong>Training &amp; Seminar:</strong> per-employee training records with certificate upload, feeds PDS Learning &amp; Development</li>
+    </ul>
+    <div class="footer"><span>HRIS Manila Council</span><span>6 · Feature Summary — Workflow &amp; Approvals</span></div>
+  </section>
+
+  <!-- 7 FEATURES SELF-SERVICE/CONFIG -->
+  <section class="slide">
+    <div class="eyebrow">Section 7</div>
+    <h2>Feature Summary — Self-Service, Config &amp; Reporting</h2>
+    <div class="cols">
+      <div>
+        <ul class="small">
+          <li><strong>Notifications:</strong> session-scoped bell, unread badge</li>
+          <li><strong>Dashboard/Nav:</strong> role-based landing pages, quick-nav badges</li>
+          <li><strong>Auth &amp; Roles:</strong> BCrypt (legacy auto-migrate), 6 roles, self-service password change</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="small">
+          <li><strong>System Settings:</strong> ~22 lookup CRUD screens (Departments, Salary Grades, Leave Types, Holidays, …)</li>
+          <li><strong>Reports:</strong> Jasper PDFs across every module</li>
+          <li><strong>Year-End Processing:</strong> mandatory-leave deduction, scheduled + on-demand</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>7 · Feature Summary — Self-Service, Config &amp; Reporting</span></div>
+  </section>
+
+  <!-- 8 FLOW: EMPLOYEE/PDS -->
+  <section class="slide">
+    <div class="eyebrow">Section 8</div>
+    <h2>End-to-End Flow — Employee Records &amp; PDS</h2>
+    <div class="flow-h">
+      <span class="box">HR creates employee</span><span class="arrow">→</span>
+      <span class="box">empHashCode assigned</span><span class="arrow">→</span>
+      <span class="box"><span class="mono">employee</span> table</span><span class="arrow">→</span>
+      <span class="box">Employee List</span>
+    </div>
+    <div class="flow-h">
+      <span class="box">Employee/HR edits PDS section</span><span class="arrow">→</span>
+      <span class="box">Own-record-or-admin check</span><span class="arrow">→</span>
+      <span class="box">Per-section PDS tables</span><span class="arrow">→</span>
+      <span class="box">CS Form 212 PDF</span>
+    </div>
+    <p class="small muted">User → System → Database → Output for every module is detailed in the full report, Section 5.</p>
+    <div class="footer"><span>HRIS Manila Council</span><span>8 · End-to-End Flow — Employee Records &amp; PDS</span></div>
+  </section>
+
+  <!-- 9 FLOW: LEAVE HAPPY PATH -->
+  <section class="slide">
+    <div class="eyebrow">Section 9</div>
+    <h2>End-to-End Flow — Leave Management</h2>
+    <div class="flow-h">
+      <span class="box">Employee files (FILED)</span><span class="arrow">→</span>
+      <span class="box">HR screening</span><span class="arrow">→</span>
+      <span class="box">Supervisor endorsement</span><span class="arrow">→</span>
+      <span class="box">HR / Council / Vice-Mayor chain</span><span class="arrow">→</span>
+      <span class="box">Leave Card posting</span><span class="arrow">→</span>
+      <span class="box">PDF export</span>
+    </div>
+    <table>
+      <thead><tr><th>User</th><th>System</th><th>Database</th><th>Output</th></tr></thead>
+      <tbody><tr>
+        <td>Employee / HR / Supervisor / Council / Vice-Mayor</td>
+        <td>LeaveWorkflowController — per-stage, per-role gate</td>
+        <td class="mono">leave_application, leave_workflow_action, leave_card_entry</td>
+        <td>Leave Card balance; Form 6 / Receipt / Card PDFs</td>
+      </tr></tbody>
+    </table>
+    <div class="footer"><span>HRIS Manila Council</span><span>9 · End-to-End Flow — Leave Management</span></div>
+  </section>
+
+  <!-- 10 DIAGRAM: LEAVE FULL -->
+  <section class="slide">
+    <div class="eyebrow">Section 10</div>
+    <h2>Detailed Workflow Diagram — Leave Decision Flow</h2>
+    <div class="flow-decision">
+      <div class="head">Supervisor decision (FOR_ENDORSEMENT)</div>
+      <div class="down">↓</div>
+      <div class="branches">
+        <div class="branch"><div class="label">Endorse</div><div class="box">ENDORSED → days check</div></div>
+        <div class="branch"><div class="label">Deny</div><div class="box end-bad">DISAPPROVED</div></div>
+        <div class="branch"><div class="label">Return</div><div class="box">RETURNED → HR</div></div>
+      </div>
+    </div>
+    <div class="flow-decision">
+      <div class="head">≤5 days vs &gt;5 days</div>
+      <div class="down">↓</div>
+      <div class="branches">
+        <div class="branch"><div class="label">≤ 5 days</div><div class="box end-good">HR approves → APPROVED</div></div>
+        <div class="branch"><div class="label">&gt; 5 days</div><div class="box">Docs → Admin Review → Council Review</div></div>
+      </div>
+    </div>
+    <div class="flow-decision">
+      <div class="head">Council Review: &lt;15 vs ≥15 days</div>
+      <div class="down">↓</div>
+      <div class="branches">
+        <div class="branch"><div class="label">&lt; 15 days</div><div class="box end-good">Council approves → APPROVED</div></div>
+        <div class="branch"><div class="label">≥ 15 days</div><div class="box">→ Vice-Mayor Final Approval</div></div>
+      </div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>10 · Detailed Workflow Diagram — Leave</span></div>
+  </section>
+
+  <!-- 11 DIAGRAM: CLEARANCE + PDS -->
+  <section class="slide">
+    <div class="eyebrow">Section 11</div>
+    <h2>Detailed Workflow Diagrams — Clearance &amp; PDS Gate</h2>
+    <div class="cols">
+      <div>
+        <h3>Clearance approval</h3>
+        <div class="flow-h"><span class="box">Employee files</span><span class="arrow">→</span><span class="box">SUBMITTED</span><span class="arrow">→</span><span class="box">Approver sign-offs</span></div>
+        <div class="flow-decision">
+          <div class="down">↓</div>
+          <div class="branches">
+            <div class="branch"><div class="label">All approve</div><div class="box end-good">APPROVED PDF</div></div>
+            <div class="branch"><div class="label">Any disapprove</div><div class="box end-bad">DISAPPROVED + reason</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>PDS edit-authorization gate</h3>
+        <div class="flow-h"><span class="box">Save request</span><span class="arrow">→</span><span class="box">Read session actor</span></div>
+        <div class="flow-decision">
+          <div class="down">↓</div>
+          <div class="branches">
+            <div class="branch"><div class="label">Admin / Owner</div><div class="box end-good">Save proceeds; no self-promotion</div></div>
+            <div class="branch"><div class="label">Neither</div><div class="box end-bad">Denied — no write</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>HRIS Manila Council</span><span>11 · Detailed Workflow Diagrams — Clearance &amp; PDS</span></div>
+  </section>
+
+  <!-- 12 INTERACTIONS -->
+  <section class="slide">
+    <div class="eyebrow">Section 12</div>
+    <h2>Module Interactions &amp; Dependencies</h2>
+    <div class="flow-h">
+      <span class="box">Employee Record (hub)</span><span class="arrow">→</span>
+      <span class="box">PDS / Appointments / Service Record / 201 Files / Clearance / Leave</span><span class="arrow">→</span>
+      <span class="box">Reports &amp; PDF Exports</span>
+    </div>
+    <div class="flow-h"><span class="box">System Settings (lookups)</span><span class="arrow">→</span><span class="box">Every module's dropdowns &amp; rules</span></div>
+    <div class="flow-h"><span class="box">Training &amp; Seminar</span><span class="arrow">→</span><span class="box">PDS Learning &amp; Development</span></div>
+    <div class="flow-h"><span class="box">Leave Management</span><span class="arrow">→</span><span class="box">Notifications</span><span class="arrow">→</span><span class="box">Archive (receipts/records)</span></div>
+    <div class="callout accent">No module is fully isolated — the Employee Record is the hub every other module reads from; System Settings underpins nearly all of them; Reports is downstream of everything.</div>
+    <div class="footer"><span>HRIS Manila Council</span><span>12 · Module Interactions &amp; Dependencies</span></div>
+  </section>
+
+  <!-- 13 REPORTS -->
+  <section class="slide">
+    <div class="eyebrow">Section 13</div>
+    <h2>Reports &amp; PDF Exports</h2>
+    <table>
+      <thead><tr><th style="width:40%">Report</th><th>Source module</th></tr></thead>
+      <tbody>
+        <tr><td>PDS (CS Form 212)</td><td>Personal Data Sheet</td></tr>
+        <tr><td>CS Form 6</td><td>Leave Management</td></tr>
+        <tr><td>Leave Card</td><td>Leave Management (ledger)</td></tr>
+        <tr><td>Leave Verification Receipt</td><td>Leave Management (&gt;5-day leaves)</td></tr>
+        <tr><td>Clearance</td><td>Clearance</td></tr>
+        <tr><td>Service Record</td><td>Service Record</td></tr>
+        <tr><td>Position Description Form</td><td>System Settings — Position Titles</td></tr>
+        <tr><td>Report on Separation, Employee Reports</td><td>Employee Records</td></tr>
+      </tbody>
+    </table>
+    <div class="footer"><span>HRIS Manila Council</span><span>13 · Reports &amp; PDF Exports</span></div>
+  </section>
+
+  <!-- 14 SYSTEM SETTINGS -->
+  <section class="slide">
+    <div class="eyebrow">Section 14</div>
+    <h2>System Settings Reference</h2>
+    <p class="muted small">~22 lookup/reference-data CRUD screens, all Admin-only.</p>
+    <div class="cols">
+      <ul class="small"><li>Departments · Divisions · Offices · Districts</li><li>Position Titles (+ Position Description Forms)</li><li>Salary Grades · Levels</li><li>Employee Status · Appointment Status · Civil Status</li></ul>
+      <ul class="small"><li>Degree Courses/Levels · Academic Honors · Schools · Scholarships · Professions · Eligibilities</li><li>Document Types · Learning Types</li><li>Leave Types · Holidays · Leave Signatories</li></ul>
+    </div>
+    <div class="callout accent">Employee Status drives the year-end coterminous exclusion; Leave Signatories hold the default names printed on CS Form 6.</div>
+    <div class="footer"><span>HRIS Manila Council</span><span>14 · System Settings Reference</span></div>
+  </section>
+
+  <!-- 15 NOTES -->
+  <section class="slide">
+    <div class="eyebrow">Section 15</div>
+    <h2>Notes, Assumptions &amp; References</h2>
+    <ul class="fill">
+      <li>Current as of <strong>22 July 2026</strong>, including CR-023 (Archive sub-folders) shipped the same day</li>
+      <li>Sources: <span class="cite">docs/HRIS_PROCESS_FLOWS.md</span>, <span class="cite">docs/leave/LEAVE_PROCESS_FLOW.md</span>, <span class="cite">docs/changes/*.md</span>, application source, live database</li>
+      <li>Security/vulnerability analysis is out of scope here — see the separate <span class="cite">HRIS_Old_vs_New_Comparison_Report</span> (13 Jul 2026)</li>
+      <li>No code was changed to produce this documentation</li>
+    </ul>
+    <div class="footer"><span>HRIS Manila Council</span><span>15 · Notes, Assumptions &amp; References</span></div>
+  </section>
+
+  <!-- 16 CLOSING -->
+  <section class="slide">
+    <div class="eyebrow">Section 16</div>
+    <h2>Closing</h2>
+    <div class="callout">This deck and the accompanying full report cover every HRIS module, its features, its end-to-end process flow, and how modules depend on one another — the complete answer to CR Request ID&nbsp;016.</div>
+    <p class="muted" style="margin-top:2vh;">Full detail, source citations, and additional diagrams are in <span class="mono">HRIS_System_Documentation_Report.pdf</span>.</p>
+    <div class="footer"><span>HRIS Manila Council</span><span>16 · Closing — Thank you</span></div>
+  </section>
+
+  <div class="nav">
+    <button onclick="go(-1)" aria-label="Previous">&#8249;</button>
+    <button onclick="go(1)" aria-label="Next">&#8250;</button>
+  </div>
+  <div class="hint">← → / Space to navigate · F for fullscreen · P to print</div>
+</div>
+
+<script>
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    document.getElementById('progress').style.width = ((i)/(slides.length-1)*100) + '%';
+  }
+  function go(d){ show(i+d); }
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); go(1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(-1); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+    else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();} }
+    else if(e.key==='p'||e.key==='P'){ window.print(); }
+  });
+  show(0);
+</script>
+</body>
+</html>

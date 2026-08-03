@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRIS Manila Council — System &amp; Process Flow Documentation</title>
+<style>
+  :root{
+    --ink:#1a2230; --muted:#55606f; --line:#d8dee7; --soft:#f4f6f9;
+    --navy:#1f3a5f; --accent:#0b5cad; --good:#1a7f4b; --warn:#b26a00; --bad:#b4232a;
+    --code:#f2f4f7;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); margin:0; background:#e9edf2; line-height:1.5; font-size:14px;
+  }
+  .page{
+    background:#fff; width:210mm; min-height:297mm; margin:12px auto; padding:22mm 20mm;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+  }
+  h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif; color:var(--navy); line-height:1.25; margin:0 0 .4em;}
+  h1{font-size:30px;} h2{font-size:22px; border-bottom:3px solid var(--navy); padding-bottom:6px; margin-top:0;}
+  h3{font-size:17px; color:var(--accent); margin-top:1.4em;}
+  h4{font-size:14px; color:var(--ink); margin-top:1.1em;}
+  p{margin:.5em 0;} ul,ol{margin:.4em 0 .8em; padding-left:20px;} li{margin:.25em 0;}
+  small,.muted{color:var(--muted);}
+  code,.mono{font-family:"Consolas","SF Mono",Menlo,monospace; font-size:12px; background:var(--code);
+    padding:1px 5px; border-radius:3px; color:#243b53;}
+  pre{background:var(--code); border:1px solid var(--line); border-left:4px solid var(--accent);
+    padding:10px 12px; border-radius:5px; overflow-x:auto; font-family:"Consolas",Menlo,monospace;
+    font-size:11.5px; line-height:1.45; margin:.6em 0;}
+  table{border-collapse:collapse; width:100%; margin:.7em 0; font-size:12.5px;}
+  th,td{border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top;}
+  th{background:var(--navy); color:#fff; font-weight:600; font-family:"Segoe UI",sans-serif;}
+  tbody tr:nth-child(even){background:var(--soft);}
+  .tag{display:inline-block; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px;
+    color:#fff; letter-spacing:.3px; text-transform:uppercase; white-space:nowrap;}
+  .t-core{background:var(--navy);} .t-self{background:var(--accent);} .t-flow{background:var(--warn);}
+  .t-config{background:#6b7280;} .t-report{background:var(--good);}
+  .cite{font-family:"Consolas",Menlo,monospace; font-size:11px; color:var(--muted);
+    background:#eef2f7; border:1px solid #dbe3ec; border-radius:3px; padding:1px 6px;}
+  .callout{border:1px solid var(--line); border-left:5px solid var(--accent); background:var(--soft);
+    padding:10px 14px; border-radius:5px; margin:.8em 0;}
+  .callout.good{border-left-color:var(--good);} .callout.warn{border-left-color:var(--warn);}
+  .callout.bad{border-left-color:var(--bad);}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .card{border:1px solid var(--line); border-radius:6px; padding:12px 14px; background:#fff;}
+  .card.core{border-top:4px solid var(--navy);} .card.flow{border-top:4px solid var(--warn);}
+  .kv{width:100%;} .kv td{border:none; border-bottom:1px solid var(--line); padding:5px 4px;}
+  .kv td:first-child{color:var(--muted); width:42%;}
+  .cover{display:flex; flex-direction:column; justify-content:center; min-height:253mm; text-align:center;}
+  .cover .rule{width:70px; height:5px; background:var(--accent); margin:22px auto;}
+  .cover .sub{font-size:19px; color:var(--muted); font-family:Georgia,serif;}
+  .toc li{margin:.35em 0;} .toc .num{display:inline-block; width:26px; color:var(--accent); font-weight:700;}
+  .toc a{color:var(--ink); text-decoration:none;} .toc a:hover{color:var(--accent);}
+  .secnum{color:var(--accent); font-family:"Segoe UI",sans-serif; font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase;}
+  .foot{margin-top:26px; padding-top:8px; border-top:1px solid var(--line); font-size:10.5px; color:var(--muted); display:flex; justify-content:space-between;}
+
+  /* ---- Process-flow diagram components ---- */
+  .swimlane{width:100%; border-collapse:collapse; margin:.7em 0; font-size:11px;}
+  .swimlane th{background:var(--navy); color:#fff; padding:6px 8px; font-size:10.5px; text-align:left;}
+  .swimlane td{border:1px solid var(--line); padding:6px 8px; vertical-align:top;}
+  .swimlane td.rowhead{background:var(--soft); color:var(--navy); font-weight:700; width:98px;}
+  .swimlane tr:nth-child(2) td:not(.rowhead){background:#fbfcfe;}
+  .flow-h{display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin:.7em 0;}
+  .flow-h .box{background:var(--soft); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:5px; padding:6px 10px; font-size:11px; color:var(--ink);}
+  .flow-h .arrow{color:var(--accent); font-weight:700; font-size:13px;}
+  .flow-decision{margin:.9em 0 .5em;}
+  .flow-decision .head{background:var(--navy); color:#fff; border-radius:6px; padding:8px 14px;
+    text-align:center; font-size:11.5px; font-weight:700; max-width:360px; margin:0 auto;}
+  .flow-decision .down{text-align:center; color:var(--accent); font-size:16px; margin:2px 0;}
+  .flow-decision .branches{display:flex; gap:12px; justify-content:center; margin-top:2px; flex-wrap:wrap;}
+  .flow-decision .branch{flex:1; min-width:170px; max-width:250px;}
+  .flow-decision .branch .label{text-align:center; font-size:10px; color:var(--accent); font-weight:700;
+    margin-bottom:4px; text-transform:uppercase; letter-spacing:.3px;}
+  .flow-decision .branch .box{background:#fff; border:1px solid var(--line); border-top:3px solid var(--accent);
+    border-radius:5px; padding:8px 10px; font-size:10.5px; text-align:center;}
+  .flow-decision .branch .box.end-good{border-top-color:var(--good);}
+  .flow-decision .branch .box.end-bad{border-top-color:var(--bad);}
+  .modtable td:first-child{white-space:nowrap; font-weight:600;}
+
+  @media print{
+    body{background:#fff;}
+    .page{width:auto; min-height:auto; margin:0; padding:16mm 15mm; box-shadow:none;}
+    .page + .page{page-break-before:always;}
+    h2,h3{break-after:avoid;} table,pre,.callout,.swimlane,.flow-decision{break-inside:avoid;}
+  }
+  @page{size:A4; margin:14mm;}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page">
+  <div class="cover">
+    <div class="secnum">Internal Documentation · City Council of Manila</div>
+    <h1 style="font-size:36px; margin-top:14px;">HRIS Manila Council</h1>
+    <div class="rule"></div>
+    <div class="sub">System &amp; Process Flow Documentation</div>
+    <p class="muted" style="margin-top:26px; font-size:15px;">
+      Complete Modules · Feature Summary · End-to-End Process Flows<br>
+      Workflow Diagrams · Module Interactions · Roles &amp; Responsibilities
+    </p>
+    <table class="kv" style="max-width:440px; margin:34px auto 0; font-size:13px;">
+      <tr><td>Document</td><td>HRIS Complete System &amp; Process Flow Documentation</td></tr>
+      <tr><td>Requested under</td><td>CR Request ID 016 (resubmitted)</td></tr>
+      <tr><td>Requested by</td><td>Chief of Staff Gino Boongaling</td></tr>
+      <tr><td>System</td><td>HRIS Manila Council (manilacitycouncil.com)</td></tr>
+      <tr><td>Basis</td><td>Application source, maintained process-flow docs, live deployment</td></tr>
+      <tr><td>Report date</td><td>22 July 2026</td></tr>
+      <tr><td>Classification</td><td>Internal — Management &amp; Project Governance</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ TOC ============ -->
+<section class="page">
+  <h2>Table of Contents</h2>
+  <ol class="toc" style="list-style:none; padding-left:0; font-size:15px; font-family:Georgia,serif;">
+    <li><span class="num">1</span> <a href="#sec1">Executive Summary</a></li>
+    <li><span class="num">2</span> <a href="#sec2">HRIS Overview</a></li>
+    <li><span class="num">3</span> <a href="#sec3">Complete HRIS Modules</a></li>
+    <li><span class="num">4</span> <a href="#sec4">Feature Summary per Module</a></li>
+    <li><span class="num">5</span> <a href="#sec5">End-to-End Process Flow (Every Module)</a></li>
+    <li><span class="num">6</span> <a href="#sec6">Detailed Workflow Diagrams</a></li>
+    <li><span class="num">7</span> <a href="#sec7">Module Interactions &amp; Dependencies</a></li>
+    <li><span class="num">8</span> <a href="#sec8">User Roles &amp; Responsibilities</a></li>
+    <li><span class="num">9</span> <a href="#sec9">Notes, Assumptions &amp; Documentation References</a></li>
+  </ol>
+  <div class="callout">
+    <strong>How to read the citations.</strong> Every material claim is tagged with a source in
+    <span class="cite">monospace</span> — a source file, a maintained process-flow document, or a
+    database migration. Section&nbsp;9 lists every source document used to compile this report.
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Contents</span></div>
+</section>
+
+<!-- ============ 1. EXECUTIVE SUMMARY ============ -->
+<section class="page" id="sec1">
+  <div class="secnum">Section 1</div>
+  <h2>Executive Summary</h2>
+  <p>
+    This report documents the HRIS Manila Council system <strong>as it exists today</strong> — every
+    module, its features, its end-to-end process flow, and how modules depend on one another — for
+    management and project-governance reference. It was produced in response to CR Request ID&nbsp;016
+    (resubmitted 22&nbsp;July&nbsp;2026 by Chief of Staff Gino Boongaling): <em>"Requesting HRIS Process
+    flow for all modules and features for documentation."</em> This is a documentation exercise; no
+    application code was changed to produce it.
+  </p>
+
+  <h3>What this report covers</h3>
+  <table>
+    <thead><tr><th style="width:30%">Section</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td>HRIS Overview</td><td>What the system is, who uses it, technology stack, current deployment scale.</td></tr>
+      <tr><td>Complete HRIS Modules</td><td>Full inventory — 15 functional modules across Core Records, Self-Service, Workflow &amp; Approvals, Configuration, and Reporting.</td></tr>
+      <tr><td>Feature Summary per Module</td><td>What each module does today, in enough detail to onboard a new administrator or reviewer.</td></tr>
+      <tr><td>End-to-End Process Flow</td><td>A User → System → Database → Output diagram for every module.</td></tr>
+      <tr><td>Detailed Workflow Diagrams</td><td>The three genuinely branching decision flows: Leave, Clearance, PDS edit-authorization.</td></tr>
+      <tr><td>Module Interactions</td><td>Which modules feed or depend on which others.</td></tr>
+      <tr><td>Roles &amp; Responsibilities</td><td>Every account role, what it may do, and where it lands after login.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout good">
+    <strong>Current state, at a glance.</strong> HRIS Manila Council is a live Spring Boot application
+    serving the City Council's HRM Section — 625 active employee 201-file records, 15 functional
+    modules, a 6-role authorization model, and a multi-stage Leave decision workflow spanning Employee,
+    HR, Supervisor, Council Secretary and Vice-Mayor accounts. It has been extended through a continuous
+    series of Change Requests (CR-015 through CR-023) rather than a single big-bang rewrite.
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 1 · Executive Summary</span></div>
+</section>
+
+<!-- ============ 2. HRIS OVERVIEW ============ -->
+<section class="page" id="sec2">
+  <div class="secnum">Section 2</div>
+  <h2>HRIS Overview</h2>
+  <p>
+    HRIS Manila Council is a web application used by the City Council of Manila's Human Resource
+    Management (HRM) Section to maintain 201-file records, process leave applications, clearances, and
+    other HR transactions for the Council's employees, and to give employees self-service access to
+    their own records.
+  </p>
+
+  <h3>2.1 Who uses it</h3>
+  <table>
+    <thead><tr><th style="width:26%">User group</th><th>What they use HRIS for</th></tr></thead>
+    <tbody>
+      <tr><td>HRM Section (HR/Admin)</td><td>Maintains every employee's 201 file, processes leave/clearance, configures system-wide lookups, generates reports.</td></tr>
+      <tr><td>All Council employees</td><td>Self-service: view/edit own PDS, file leave, view own clearance/service record/leave card, change password.</td></tr>
+      <tr><td>Immediate Supervisors</td><td>Endorse, deny, or return-to-HR leave applications awaiting endorsement.</td></tr>
+      <tr><td>Secretary to the City Council</td><td>Council Review stage of every documents-required leave application.</td></tr>
+      <tr><td>Vice-Mayor / Presiding Officer</td><td>Final approval, denial, or return-to-HR of leave applications of 15 or more working days.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.2 Technology stack</h3>
+  <table class="kv">
+    <tr><td>Language / runtime</td><td>Java 11</td></tr>
+    <tr><td>Framework</td><td>Spring Boot 2.2.4 (Web, Data JPA, Data REST, Security, Thymeleaf)</td></tr>
+    <tr><td>Packaging</td><td>WAR with embedded Tomcat, deployed at <span class="mono">target/hrisp.war</span></td></tr>
+    <tr><td>Database</td><td>MySQL — schema <span class="mono">hris_01</span></td></tr>
+    <tr><td>Reporting</td><td>JasperReports — <span class="mono">.jrxml</span> source compiled to <span class="mono">.jasper</span> at build time</td></tr>
+    <tr><td>Frontend</td><td>Server-rendered Thymeleaf views, Bootstrap/Limitless admin theme, Select2 searchable combos, DataTables</td></tr>
+    <tr><td>Deployment</td><td>nginx reverse proxy (Let's Encrypt TLS) → Spring Boot on port 8082, managed by <span class="mono">systemd</span> (<span class="mono">hrisp.service</span>, auto-restart on crash)</td></tr>
+  </table>
+
+  <h3>2.3 Current scale</h3>
+  <table class="kv">
+    <tr><td>Live domain</td><td class="mono">manilacitycouncil.com</td></tr>
+    <tr><td>Active employee 201-file records</td><td>625 <span class="cite">hris_01.employee, verified 22-Jul-2026</span></td></tr>
+    <tr><td>Account roles</td><td>6 — ADMIN, HR, EMPLOYEE, SUPERVISOR, COUNCIL, VICEMAYOR</td></tr>
+    <tr><td>Functional modules</td><td>15 (Section 3)</td></tr>
+    <tr><td>Change Requests delivered to date</td><td>CR-015 through CR-023, continuously deployed</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>How the system has grown.</strong> HRIS began as a 201-file / PDS system (Employee Records,
+    PDS, Appointments, Clearance, Service Record, 201 Files, System Settings). Leave Management (CR-016)
+    was added as a full module with its own multi-stage decision workflow, later given real login
+    accounts per approving actor (CR-016 revision 2) and further refined for routing and return-to-HR
+    behavior (CR-020). Archive gained admin-manageable sub-folders today (CR-023). Every change is
+    additive — the underlying 201-file core has not been rebuilt.
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 2 · HRIS Overview</span></div>
+</section>
+
+<!-- ============ 3. COMPLETE HRIS MODULES ============ -->
+<section class="page" id="sec3">
+  <div class="secnum">Section 3</div>
+  <h2>Complete HRIS Modules</h2>
+  <p>15 functional modules, grouped by their role in the system.</p>
+
+  <table class="modtable">
+    <thead><tr><th style="width:26%">Module</th><th style="width:14%">Category</th><th>One-line description</th></tr></thead>
+    <tbody>
+      <tr><td>Employee Records</td><td><span class="tag t-core">Core</span></td><td>The 201-file master record every other module hangs off.</td></tr>
+      <tr><td>Personal Data Sheet (PDS)</td><td><span class="tag t-core">Core</span></td><td>CS Form 212 across 10 sub-sections, admin- and employee-editable.</td></tr>
+      <tr><td>Appointments</td><td><span class="tag t-core">Core</span></td><td>Appointment papers with document attachments.</td></tr>
+      <tr><td>Service Record</td><td><span class="tag t-core">Core</span></td><td>Position/office/salary history; CSC Service Record printout.</td></tr>
+      <tr><td>201 Files</td><td><span class="tag t-core">Core</span></td><td>General per-employee document repository by document type.</td></tr>
+      <tr><td>Archive</td><td><span class="tag t-core">Core</span></td><td>Admin-managed document folders (SALN, Resigned Employees, Leaves, and any admin-created folder).</td></tr>
+      <tr><td>Leave Management</td><td><span class="tag t-flow">Workflow</span></td><td>CS Form 6 filing through a 5-actor decision flow to Leave Card posting.</td></tr>
+      <tr><td>Clearance</td><td><span class="tag t-flow">Workflow</span></td><td>Employee clearance application with per-approver sign-off.</td></tr>
+      <tr><td>Training &amp; Seminar</td><td><span class="tag t-flow">Workflow</span></td><td>Training/seminar records that feed the PDS Learning &amp; Development section.</td></tr>
+      <tr><td>Notifications</td><td><span class="tag t-self">Self-Service</span></td><td>In-app bell notifications, session-scoped, unread badge.</td></tr>
+      <tr><td>Dashboard &amp; Navigation</td><td><span class="tag t-self">Self-Service</span></td><td>Role-based landing pages and quick-navigation badges.</td></tr>
+      <tr><td>Auth, Roles &amp; Change Password</td><td><span class="tag t-config">Config</span></td><td>Login, the 6-role authorization model, self-service password change.</td></tr>
+      <tr><td>System Settings</td><td><span class="tag t-config">Config</span></td><td>~22 lookup/reference-data CRUD screens (departments, salary grades, leave types, holidays, etc.).</td></tr>
+      <tr><td>Reports &amp; PDF Exports</td><td><span class="tag t-report">Reporting</span></td><td>Jasper-based PDF generation across every module.</td></tr>
+      <tr><td>Year-End Processing</td><td><span class="tag t-report">Reporting</span></td><td>Scheduled + on-demand mandatory-leave deduction run.</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 3 · Complete HRIS Modules</span></div>
+</section>
+
+<!-- ============ 4. FEATURE SUMMARY PER MODULE ============ -->
+<section class="page" id="sec4">
+  <div class="secnum">Section 4</div>
+  <h2>Feature Summary per Module</h2>
+  <p>What each module does today. Modules are grouped as in Section 3.</p>
+
+  <h3>4.1 Employee Records <span class="cite">EmployeeController</span></h3>
+  <ul>
+    <li>Create/edit the employee master record: name, birth details, gender, civil status, blood type, citizenship, government ID numbers (GSIS/BIR/PhilHealth/Pag-IBIG), addresses, division/office/position, appointment &amp; employee status.</li>
+    <li>Photo upload, login credential provisioning, and role assignment (Employee List → credentials).</li>
+    <li>Generates the per-employee <span class="mono">empHashCode</span> capability token used to gate every self-service (<span class="mono">/my-*</span>) URL.</li>
+    <li>Employee List, Clearance List and Appointments List are the primary admin search/browse screens.</li>
+  </ul>
+
+  <h3>4.2 Personal Data Sheet (PDS, CS Form 212)</h3>
+  <ul>
+    <li>Ten sub-sections: Personal Information, Family Background, Educational Background, Civil Service Eligibility, Work Experience (with a part-time flag), Voluntary Work, Learning &amp; Development (with an hours-display override), Other Information (with configurable Other-Info Questions), References, Government IDs (with GSIS ID and date-mask validation).</li>
+    <li>Every section is editable by HR/Admin and, on the employee's own record, by the employee — enforced server-side, not just hidden in the UI.</li>
+    <li>Long dropdowns are searchable Select2 combos; Office Name (Work Experience) and City (addresses) accept free-typed values.</li>
+    <li>Prints to the CS Form 212 PDF; empty fields print "N/A" rather than blank.</li>
+  </ul>
+
+  <h3>4.3 Appointments <span class="cite">AppointmentController</span></h3>
+  <ul>
+    <li>HR records appointment papers per employee with document attachments.</li>
+    <li>Employees view their own via My Appointments.</li>
+  </ul>
+
+  <h3>4.4 Service Record <span class="cite">ServiceRecordController</span></h3>
+  <ul>
+    <li>HR maintains position/office/salary/period history and manages the signatories printed on the form.</li>
+    <li>Prints the CSC Service Record form; employees view their own via My Service Record.</li>
+  </ul>
+
+  <h3>4.5 201 Files <span class="cite">Docs201Controller</span></h3>
+  <ul>
+    <li>General per-employee document uploads, categorized by a configurable Document Type lookup.</li>
+  </ul>
+
+  <h3>4.6 Archive <span class="cite">ArchiveController, ArchiveSection (CR-023)</span></h3>
+  <ul>
+    <li>HR/Admin-only file repositories, organized into folders: SALN, Resigned Employees, and Leaves out of the box.</li>
+    <li><strong>As of today (CR-023):</strong> folders are admin-manageable — a "Manage Folders" screen lets an admin add, rename, or delete folders. A folder's code is immutable once created; deletion is blocked while files remain in it.</li>
+    <li>Per-folder customizable labels for grouping files, free-text tags, search, and client-side CSV/XLS export.</li>
+  </ul>
+
+  <h3>4.7 Leave Management <span class="cite">LeaveController, LeaveWorkflowController</span></h3>
+  <ul>
+    <li>Employees file a CS Form 6 leave application (My Leave Record); HR screens, and the request proceeds through a multi-stage decision flow with dedicated actor accounts — Supervisor, Secretary to the City Council, and Vice-Mayor (full detail in Sections&nbsp;5 and&nbsp;6).</li>
+    <li>Employee's Leave Card ledger tracks running VL/SL balances; approved leave posts a deduction only for Vacation and Mandatory/Forced Leave (VL) or Sick Leave (SL) — other leave types are recorded without changing balances.</li>
+    <li>Monthly accrual (1.25 VL + 1.25 SL) is a manual HR action per employee; a scheduled/on-demand Year-End run deducts unused mandatory leave (Section&nbsp;4.15).</li>
+    <li>Employees may appeal a disapproved application or cancel a still-pending one from My Leave Record.</li>
+    <li>Leave Tracker shows a calendar of approved leaves. Exports: CS Form 6 PDF, Leave Card PDF, and a Leave Verification Receipt PDF for leaves requiring supporting documents.</li>
+  </ul>
+
+  <h3>4.8 Clearance <span class="cite">ClearanceController, ApproversController</span></h3>
+  <ul>
+    <li>Employees file a clearance application from My Clearance; each configured approver records a sign-off.</li>
+    <li>HR/Admin process outstanding clearances from the Clearance List and maintain the approver/signatory settings.</li>
+    <li>Approved or disapproved (with reason) clearance prints to PDF.</li>
+  </ul>
+
+  <h3>4.9 Training &amp; Seminar <span class="cite">TrainingSeminarController</span></h3>
+  <ul>
+    <li>HR records trainings/seminars per employee: title, provider, hours, dates, and an uploaded certificate.</li>
+    <li>Feeds the PDS Learning &amp; Development section.</li>
+  </ul>
+
+  <h3>4.10 Notifications <span class="cite">NotificationController</span></h3>
+  <ul>
+    <li>In-app bell notification on every account, with an unread badge that clears on open.</li>
+    <li>Notifications are session-scoped — a user only ever sees their own. Today's producer is the Leave decision flow (employee, per-stage actor, and HR alerts).</li>
+  </ul>
+
+  <h3>4.11 Dashboard &amp; Navigation <span class="cite">NavController</span></h3>
+  <ul>
+    <li>Routes each role to its working landing page on login: Dashboard for ADMIN/HR/EMPLOYEE, Leave Approvals for SUPERVISOR/COUNCIL/VICEMAYOR.</li>
+    <li>Quick-navigation badges surface pending work, e.g. the Leave Applications "New" count.</li>
+  </ul>
+
+  <h3>4.12 Auth, Roles &amp; Change Password <span class="cite">SecurityConfig, ChangePasswordController</span></h3>
+  <ul>
+    <li>Form login; passwords stored BCrypt, with legacy plain-text passwords auto-migrated on next successful login.</li>
+    <li>Six roles by <span class="mono">userType</span>: ADMIN, HR, EMPLOYEE, SUPERVISOR, COUNCIL, VICEMAYOR — assigned from Employee List → credentials.</li>
+    <li>Self-service password change at <span class="mono">/change-password</span>.</li>
+  </ul>
+
+  <h3>4.13 System Settings <span class="cite">~22 lookup controllers</span></h3>
+  <ul>
+    <li>CRUD reference-data screens: Departments, Divisions, Offices, Districts, Position Titles (+ Position Description Forms), Salary Grades, Levels, Employee Status, Appointment Status, Civil Status, Degree Courses/Levels, Academic Honors, Schools, Scholarships, Professions, Eligibilities, Document Types, Learning Types, Leave Types, Holidays, Other Info Questions, and the Leave Endorsement/Signatory defaults.</li>
+    <li>Employee Status drives the year-end coterminous exclusion (any status whose name contains "COTERM").</li>
+    <li>Leave signatories hold the default names printed on CS Form 6; every workflow action can still override them for an acting official.</li>
+  </ul>
+
+  <h3>4.14 Reports &amp; PDF Exports <span class="cite">ReportsController, jasper/reports/*.jrxml</span></h3>
+  <ul>
+    <li>Jasper-based PDFs: PDS (CS Form 212), CS Form 6 (leave application), Leave Card, Leave Verification Receipt, Clearance, Service Record, Position Description Form, Report on Separation, and individual Employee Reports.</li>
+  </ul>
+
+  <h3>4.15 Year-End Processing <span class="cite">LeaveYearEndProcessor</span></h3>
+  <ul>
+    <li>Every December 31 at 23:30 (Asia/Manila), and on demand from Leave Applications → Year-End Mandatory/Forced Leave Processing, deducts each eligible employee's unused mandatory leave (5 minus days already used).</li>
+    <li>Coterminous employees are excluded and reported in the run summary; the run is idempotent per year.</li>
+  </ul>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 4 · Feature Summary per Module</span></div>
+</section>
+
+<!-- ============ 5. END-TO-END PROCESS FLOW ============ -->
+<section class="page" id="sec5">
+  <div class="secnum">Section 5</div>
+  <h2>End-to-End Process Flow — Every Module</h2>
+  <p>Each module's flow expressed as <strong>User → System → Database → Output</strong>.</p>
+
+  <h3>5.1 Employee Records</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>HR/Admin creates or edits an employee record</td></tr>
+    <tr><td class="rowhead">System</td><td>EmployeeController validates, assigns <span class="mono">empHashCode</span> on create</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">employee</span> table (+ FK targets: division, office, position, employee_status)</td></tr>
+    <tr><td class="rowhead">Output</td><td>Updated Employee List; record becomes the anchor for every other module</td></tr>
+  </table>
+
+  <h3>5.2 Personal Data Sheet</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Employee or HR edits a PDS section</td></tr>
+    <tr><td class="rowhead">System</td><td>Own-record-or-admin authorization check, then save</td></tr>
+    <tr><td class="rowhead">Database</td><td>Per-section PDS tables (family_background, educational_background, work_experience, …)</td></tr>
+    <tr><td class="rowhead">Output</td><td>Saved to the 201 file; prints as the CS Form 212 PDF</td></tr>
+  </table>
+
+  <h3>5.3 Appointments</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>HR records an appointment, attaches documents</td></tr>
+    <tr><td class="rowhead">System</td><td>AppointmentController saves record + file upload via StorageService</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">appointment</span> table + stored file reference</td></tr>
+    <tr><td class="rowhead">Output</td><td>Appointments List (HR); My Appointments (employee, read-only)</td></tr>
+  </table>
+
+  <h3>5.4 Service Record</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>HR adds/edits a service-record period</td></tr>
+    <tr><td class="rowhead">System</td><td>ServiceRecordController saves entry, signatory settings applied</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">service_record</span> table</td></tr>
+    <tr><td class="rowhead">Output</td><td>CSC Service Record PDF; My Service Record (employee, read-only)</td></tr>
+  </table>
+
+  <h3>5.5 201 Files</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>HR uploads a document, tags it with a Document Type</td></tr>
+    <tr><td class="rowhead">System</td><td>Docs201Controller stores the file via StorageService</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">docs_201</span> table + stored file reference</td></tr>
+    <tr><td class="rowhead">Output</td><td>201 Files list for the employee</td></tr>
+  </table>
+
+  <h3>5.6 Archive</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Admin creates/selects a folder, uploads a file, optionally labels/tags it</td></tr>
+    <tr><td class="rowhead">System</td><td>ArchiveController validates the folder against <span class="mono">archive_section</span>, stores the file</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">archive_section</span>, <span class="mono">archive_file</span>, <span class="mono">archive_label</span></td></tr>
+    <tr><td class="rowhead">Output</td><td>Folder's file list; CSV/XLS export; sidebar reflects folders live (<span class="mono">@ModelAttribute</span> advice)</td></tr>
+  </table>
+
+  <div class="flow-h">
+    <span class="box">File leave (Employee)</span><span class="arrow">→</span>
+    <span class="box">HR screening</span><span class="arrow">→</span>
+    <span class="box">Supervisor endorsement</span><span class="arrow">→</span>
+    <span class="box">HR / Council / Vice-Mayor review chain</span><span class="arrow">→</span>
+    <span class="box">Leave Card posting</span><span class="arrow">→</span>
+    <span class="box">PDF export</span>
+  </div>
+  <h3>5.7 Leave Management (happy path — full branching in Section 6)</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Employee files; HR/Supervisor/Council/Vice-Mayor act at their stage</td></tr>
+    <tr><td class="rowhead">System</td><td>LeaveWorkflowController enforces per-stage, per-role authorization; notifies next actor</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">leave_application</span>, <span class="mono">leave_workflow_action</span>, <span class="mono">leave_card_entry</span>, <span class="mono">notification</span></td></tr>
+    <tr><td class="rowhead">Output</td><td>Leave Card balance updated; CS Form 6 PDF, Leave Verification Receipt, Leave Card PDF</td></tr>
+  </table>
+
+  <h3>5.8 Clearance</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Employee files; each configured approver signs off</td></tr>
+    <tr><td class="rowhead">System</td><td>ClearanceController records each approver decision</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">clearance</span>, per-approver sign-off rows</td></tr>
+    <tr><td class="rowhead">Output</td><td>Approved/Disapproved clearance PDF</td></tr>
+  </table>
+
+  <h3>5.9 Training &amp; Seminar</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>HR records a training with a certificate upload</td></tr>
+    <tr><td class="rowhead">System</td><td>TrainingSeminarController saves the record</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">training_seminar</span> table</td></tr>
+    <tr><td class="rowhead">Output</td><td>PDS Learning &amp; Development section reflects the training</td></tr>
+  </table>
+
+  <h3>5.10 Notifications</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Any module event (e.g. a leave stage transition)</td></tr>
+    <tr><td class="rowhead">System</td><td><span class="mono">Notifier</span> writes a notification for the affected user/role</td></tr>
+    <tr><td class="rowhead">Database</td><td><span class="mono">notification</span> table</td></tr>
+    <tr><td class="rowhead">Output</td><td>Navbar bell badge; marked read on open</td></tr>
+  </table>
+
+  <h3>5.11 System Settings</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Admin adds/edits/deletes a lookup value (e.g. a Leave Type)</td></tr>
+    <tr><td class="rowhead">System</td><td>Per-lookup controller CRUD, most with a first-boot seeder</td></tr>
+    <tr><td class="rowhead">Database</td><td>~22 dedicated lookup tables</td></tr>
+    <tr><td class="rowhead">Output</td><td>Value available in every dropdown/select that references it</td></tr>
+  </table>
+
+  <h3>5.12 Reports &amp; PDF Exports</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>User clicks an export/print action anywhere in the app</td></tr>
+    <tr><td class="rowhead">System</td><td>Controller builds a parameter map, fills the matching <span class="mono">.jasper</span> template</td></tr>
+    <tr><td class="rowhead">Database</td><td>Source record(s) for the report being printed</td></tr>
+    <tr><td class="rowhead">Output</td><td>Rendered PDF streamed to the browser</td></tr>
+  </table>
+
+  <h3>5.13 Year-End Processing</h3>
+  <table class="swimlane">
+    <tr><td class="rowhead">User</td><td>Scheduler (Dec 31, 23:30) or HR clicks the on-demand run</td></tr>
+    <tr><td class="rowhead">System</td><td><span class="mono">LeaveYearEndProcessor</span> computes 5-minus-used per eligible employee, skips already-processed/coterminous</td></tr>
+    <tr><td class="rowhead">Database</td><td>ADJUSTMENT row appended to <span class="mono">leave_card_entry</span>, period <span class="mono">YE-&lt;year&gt;</span></td></tr>
+    <tr><td class="rowhead">Output</td><td>Updated leave balances; run summary (processed / skipped / coterminous)</td></tr>
+  </table>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 5 · End-to-End Process Flow</span></div>
+</section>
+
+<!-- ============ 6. DETAILED WORKFLOW DIAGRAMS ============ -->
+<section class="page" id="sec6">
+  <div class="secnum">Section 6</div>
+  <h2>Detailed Workflow Diagrams</h2>
+  <p>The three flows with genuine branching logic, shown in full.</p>
+
+  <h3>6.1 Leave Management — decision flow <span class="cite">docs/leave/LEAVE_PROCESS_FLOW.md</span></h3>
+  <div class="flow-h">
+    <span class="box">FILED (employee)</span><span class="arrow">→</span>
+    <span class="box">HR screening</span><span class="arrow">→</span>
+    <span class="box">FOR_ENDORSEMENT (Supervisor queue)</span>
+  </div>
+  <div class="flow-decision">
+    <div class="head">Supervisor decision</div>
+    <div class="down">↓</div>
+    <div class="branches">
+      <div class="branch"><div class="label">Endorse</div><div class="box">ENDORSED → working-days check</div></div>
+      <div class="branch"><div class="label">Deny</div><div class="box end-bad">DISAPPROVED</div></div>
+      <div class="branch"><div class="label">Return (CR-020)</div><div class="box">RETURNED → back to HR screening</div></div>
+    </div>
+  </div>
+  <div class="flow-decision">
+    <div class="head">Working days, once ENDORSED</div>
+    <div class="down">↓</div>
+    <div class="branches">
+      <div class="branch"><div class="label">≤ 5 days</div><div class="box end-good">HR approves directly → APPROVED</div></div>
+      <div class="branch"><div class="label">&gt; 5 days</div><div class="box">Docs required → Admin Review → Council Review</div></div>
+    </div>
+  </div>
+  <div class="flow-decision">
+    <div class="head">Council Review (Secretary to the City Council)</div>
+    <div class="down">↓</div>
+    <div class="branches">
+      <div class="branch"><div class="label">&lt; 15 days</div><div class="box end-good">Council approves directly → APPROVED</div></div>
+      <div class="branch"><div class="label">≥ 15 days</div><div class="box">Endorses → Vice-Mayor Final Approval</div></div>
+    </div>
+  </div>
+  <div class="flow-decision">
+    <div class="head">Vice-Mayor Final Approval</div>
+    <div class="down">↓</div>
+    <div class="branches">
+      <div class="branch"><div class="label">Approve</div><div class="box end-good">APPROVED — leave card deduction posts</div></div>
+      <div class="branch"><div class="label">Deny</div><div class="box end-bad">DISAPPROVED</div></div>
+      <div class="branch"><div class="label">Return (CR-020)</div><div class="box">RETURNED → back to HR screening</div></div>
+    </div>
+  </div>
+  <p class="muted small">Employees may <strong>cancel</strong> any still-pending application, or <strong>appeal</strong> a DISAPPROVED one (re-enters HR screening). A dedicated actor account (Supervisor/Council/Vice-Mayor) may only act while the application sits at its own stage; ROLE_HR/ROLE_ADMIN may act at every stage as an acting-official fallback.</p>
+
+  <h3>6.2 Clearance — approval flow</h3>
+  <div class="flow-h">
+    <span class="box">Employee files clearance</span><span class="arrow">→</span>
+    <span class="box">SUBMITTED</span><span class="arrow">→</span>
+    <span class="box">Each configured approver signs off</span>
+  </div>
+  <div class="flow-decision">
+    <div class="head">Final decision</div>
+    <div class="down">↓</div>
+    <div class="branches">
+      <div class="branch"><div class="label">All approve</div><div class="box end-good">APPROVED — clearance PDF issued</div></div>
+      <div class="branch"><div class="label">Any disapprove</div><div class="box end-bad">DISAPPROVED, with reason</div></div>
+    </div>
+  </div>
+
+  <h3>6.3 PDS — edit-authorization gate</h3>
+  <div class="flow-h">
+    <span class="box">Save request hits PDS sub-controller</span><span class="arrow">→</span>
+    <span class="box">Read <span class="mono">actorObj</span> from session</span>
+  </div>
+  <div class="flow-decision">
+    <div class="head">Is actor ADMIN, or owner of this record?</div>
+    <div class="down">↓</div>
+    <div class="branches">
+      <div class="branch"><div class="label">Admin</div><div class="box end-good">Save proceeds; any field may change</div></div>
+      <div class="branch"><div class="label">Owner (employee)</div><div class="box end-good">Save proceeds; <span class="mono">userType</span> restored from DB (no self-promotion)</div></div>
+      <div class="branch"><div class="label">Neither</div><div class="box end-bad">Denied — redirect, no write occurs</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 6 · Detailed Workflow Diagrams</span></div>
+</section>
+
+<!-- ============ 7. MODULE INTERACTIONS ============ -->
+<section class="page" id="sec7">
+  <div class="secnum">Section 7</div>
+  <h2>Module Interactions &amp; Dependencies</h2>
+  <p>No module is fully isolated — the Employee Record is the hub every other module reads from.</p>
+
+  <table>
+    <thead><tr><th style="width:24%">Module</th><th>Depends on / feeds</th></tr></thead>
+    <tbody>
+      <tr><td>Personal Data Sheet</td><td>Reads Employee Record; Learning &amp; Development section is fed by Training &amp; Seminar entries.</td></tr>
+      <tr><td>Leave Management</td><td>Reads Employee Record + Employee Status (drives year-end coterminous exclusion); posts to its own Leave Card ledger; feeds Notifications; feeds Archive (Leaves folder).</td></tr>
+      <tr><td>Archive</td><td>Independent storage keyed by folder; receives documents originating from Leave (Verification Receipts) and HR-driven SALN / Resigned-employee filings.</td></tr>
+      <tr><td>Clearance</td><td>Reads Employee Record; Approvers/signatory settings come from System Settings.</td></tr>
+      <tr><td>Appointments, Service Record, 201 Files</td><td>All read the Employee Record; independent of each other.</td></tr>
+      <tr><td>Training &amp; Seminar</td><td>Reads Employee Record; writes into the PDS Learning &amp; Development view.</td></tr>
+      <tr><td>Notifications</td><td>Written by the Leave decision flow today; read by every logged-in user's navbar.</td></tr>
+      <tr><td>System Settings</td><td>Upstream of nearly every module — Employee Status, Departments/Divisions/Offices, Position Titles, Leave Types, Holidays, Document Types, etc. are all referenced elsewhere.</td></tr>
+      <tr><td>Reports &amp; PDF Exports</td><td>Downstream of every module — pulls live data at export time; never a system of record itself.</td></tr>
+      <tr><td>Year-End Processing</td><td>Reads Leave Management + Employee Status; writes back into the Leave Card ledger.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="flow-h">
+    <span class="box">Employee Record (hub)</span><span class="arrow">→</span>
+    <span class="box">PDS / Appointments / Service Record / 201 Files / Clearance / Leave</span><span class="arrow">→</span>
+    <span class="box">Reports &amp; PDF Exports</span>
+  </div>
+  <div class="flow-h">
+    <span class="box">System Settings (lookups)</span><span class="arrow">→</span>
+    <span class="box">Every module's dropdowns &amp; business rules</span>
+  </div>
+  <div class="flow-h">
+    <span class="box">Training &amp; Seminar</span><span class="arrow">→</span>
+    <span class="box">PDS Learning &amp; Development</span>
+  </div>
+  <div class="flow-h">
+    <span class="box">Leave Management</span><span class="arrow">→</span>
+    <span class="box">Notifications</span><span class="arrow">→</span>
+    <span class="box">Archive (receipts/records)</span>
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 7 · Module Interactions &amp; Dependencies</span></div>
+</section>
+
+<!-- ============ 8. USER ROLES ============ -->
+<section class="page" id="sec8">
+  <div class="secnum">Section 8</div>
+  <h2>User Roles &amp; Responsibilities</h2>
+  <table>
+    <thead><tr><th style="width:16%">Role</th><th style="width:38%">Responsibilities</th><th>Landing page</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mono">ROLE_ADMIN</span></td><td>Full system administration — every module, every System Settings screen, account/role provisioning.</td><td>Dashboard</td></tr>
+      <tr><td><span class="mono">ROLE_HR</span></td><td>HR records management, leave screening and every workflow stage as an acting-official fallback, clearance/appointment/service-record maintenance, Archive.</td><td>Dashboard</td></tr>
+      <tr><td><span class="mono">ROLE_EMPLOYEE</span></td><td>Self-service only: own PDS (edit), clearance filing, own service record/leave card (view), leave filing/appeal/cancel, change password.</td><td>Dashboard (My Account menu)</td></tr>
+      <tr><td><span class="mono">ROLE_SUPERVISOR</span></td><td>Endorses, denies, or returns to HR the leave applications awaiting endorsement (global queue across all supervisor accounts).</td><td>Leave Approvals</td></tr>
+      <tr><td><span class="mono">ROLE_COUNCIL</span></td><td>Secretary to the City Council — Council Review of every documents-required leave; finalizes leaves under 15 working days herself, otherwise endorses to the Vice-Mayor.</td><td>Leave Approvals</td></tr>
+      <tr><td><span class="mono">ROLE_VICEMAYOR</span></td><td>Final approval, denial, or return-to-HR of leave applications of 15 or more working days.</td><td>Leave Approvals</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <strong>Per-role authorization on Leave.</strong> A dedicated actor account may act only while an
+    application sits at its own stage — Supervisor at <span class="mono">FOR_ENDORSEMENT</span>, Council
+    at <span class="mono">FOR_COUNCIL_REVIEW</span>, Vice-Mayor at <span class="mono">FOR_FINAL_APPROVAL</span>.
+    <span class="mono">ROLE_HR</span>/<span class="mono">ROLE_ADMIN</span> may act at every stage. Employees can
+    never call a workflow action directly. Admins assign roles and reset passwords from Employee List →
+    credentials.
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 8 · User Roles &amp; Responsibilities</span></div>
+</section>
+
+<!-- ============ 9. NOTES / ASSUMPTIONS / REFERENCES ============ -->
+<section class="page" id="sec9">
+  <div class="secnum">Section 9</div>
+  <h2>Notes, Assumptions &amp; Documentation References</h2>
+
+  <h3>9.1 Currency of this document</h3>
+  <p>
+    Content is current as of <strong>22 July 2026</strong>, including CR-023 (Archive admin-manageable
+    sub-folders), shipped to production the same day this report was compiled. Change Requests are
+    delivered continuously; treat this report as a snapshot rather than a permanently accurate reference —
+    re-derive details from source for anything safety- or compliance-critical.
+  </p>
+
+  <h3>9.2 Assumptions</h3>
+  <ul>
+    <li>"Complete HRIS Modules" groups functionality by controller/feature area, not by menu structure — some modules share a single navigation entry (e.g. System Settings covers ~22 screens).</li>
+    <li>Diagrams show the <em>designed</em> flow; edge cases (e.g. HR acting on behalf of an unavailable actor) are called out in prose where they materially change the picture.</li>
+    <li>This report does not include a security/vulnerability assessment — see the separate <span class="cite">HRIS_Old_vs_New_Comparison_Report</span> (13 July 2026) for that analysis.</li>
+  </ul>
+
+  <h3>9.3 Documentation sources used</h3>
+  <table>
+    <thead><tr><th style="width:36%">Source</th><th>Used for</th></tr></thead>
+    <tbody>
+      <tr><td><span class="cite">docs/HRIS_PROCESS_FLOWS.md</span></td><td>All-modules overview backbone (Sections 2–5, 7, 8)</td></tr>
+      <tr><td><span class="cite">docs/leave/LEAVE_PROCESS_FLOW.md</span></td><td>Full Leave decision-flow detail (Sections 5.7 and 6.1)</td></tr>
+      <tr><td><span class="cite">docs/changes/*.md</span></td><td>PDS self-edit authorization history (Section 6.3)</td></tr>
+      <tr><td>Application source (controllers, entities)</td><td>Module inventory and feature verification (Sections 3, 4)</td></tr>
+      <tr><td>Live database (<span class="mono">hris_01</span>)</td><td>Current scale figures (Section 2.3)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout good">
+    <strong>No code was changed to produce this report.</strong> It is a documentation deliverable only,
+    matching the scope of CR Request ID&nbsp;016.
+  </div>
+  <div class="foot"><span>HRIS Manila Council — System &amp; Process Flow Documentation</span><span>Section 9 · Notes, Assumptions &amp; References — End of report</span></div>
+</section>
+
+</body>
+</html>
